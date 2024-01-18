@@ -1,0 +1,35 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": ["externalview", "externalviews", "loginview", "newdata", "tablestest"],
+		"search.exclude": {
+			"./.markdown": true,
+			".md": true,
+			"**/*.code-search": false,
+			"**/*.md": true
+		},
+		"eslint.packageManager": "yarn",
+		"editor.formatOnSave": true,
+		"html.format.endWithNewline": true,
+		"html.format.indentHandlebars": true,
+		"html.format.indentInnerHtml": true,
+		"eslint.run": "onSave",
+		"prettier.quoteProps": "preserve",
+		"prettier.semi": false,
+		"prettier.singleQuote": true,
+		"prettier.tabWidth": 3,
+		"prettier.useTabs": true,
+		"eslint.codeActionsOnSave.mode": "problems",
+		"eslint.lintTask.enable": true,
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"prettier.insertPragma": true,
+		"prettier.printWidth": 120,
+		"prettier.vueIndentScriptAndStyle": true,
+		"prettier.proseWrap": "never",
+		"vetur.format.options.useTabs": true
+	}
+}
