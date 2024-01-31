@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              color: PrimaryTheme.secundaryColor.withOpacity(0.9),
+              color: Colors.white,
             ),
               Positioned(
                 top: height * 0.1,
@@ -30,9 +30,9 @@ class LoginScreen extends StatelessWidget {
                     color: PrimaryTheme.backgroundColor,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.fitness_center,
-                    color: PrimaryTheme.secundaryColor.withOpacity(0.8),
+                    color: Colors.white,
                     size: 80,
                   ),
                 ),
@@ -84,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                             Text(
                               '¿Olvidaste tu contraseña?',
                               style: TextStyle(
-                                color: PrimaryTheme.secundaryColor,
+                                color: Colors.white,
                               ),
                             ),
                           ],
@@ -104,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: PrimaryTheme.secundaryColor,
+                              backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -123,7 +123,7 @@ class LoginScreen extends StatelessWidget {
                             const Text(
                               '¿No tienes una cuenta?',
                               style: TextStyle(
-                                color: PrimaryTheme.secundaryColor,
+                                color: Colors.white,
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -132,7 +132,7 @@ class LoginScreen extends StatelessWidget {
                               child: const Text(
                                 'Regístrate',
                                 style: TextStyle(
-                                  color: PrimaryTheme.secundaryColor,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

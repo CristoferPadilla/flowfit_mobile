@@ -16,7 +16,7 @@ class CustomeTextTitle extends StatelessWidget {
       style: TextStyle(
         fontSize: size,
         fontWeight: FontWeight.bold,
-        color: PrimaryTheme.secundaryColor,
+        color: Colors.white,
       ),
     );
   }

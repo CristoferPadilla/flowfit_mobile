@@ -15,18 +15,18 @@ class CustomeTextField extends StatelessWidget {
       obscureText: isPassword,
       keyboardType:type ,
       style: const TextStyle(
-        color: PrimaryTheme.secundaryColor, 
+        color: Colors.white, 
       ),
       decoration: InputDecoration(
         hintText: title,
         hintStyle: const TextStyle(
-          color: PrimaryTheme.secundaryColor, 
+          color: Colors.white, 
         ),
-        focusColor: PrimaryTheme.secundaryColor, 
+        focusColor: Colors.white, 
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             style: BorderStyle.solid,
-            color: PrimaryTheme.secundaryColor, 
+            color: Colors.white, 
           ),
         ),
       ),

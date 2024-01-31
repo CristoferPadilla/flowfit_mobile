@@ -14,14 +14,14 @@ class NavBar extends StatelessWidget {
       hoverColor: Colors.grey,
       activeColor: Colors.white,
       iconSize: 40,
-      color: PrimaryTheme.secundaryColor,
+      color: Colors.black,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       duration: Duration(milliseconds: 800),
       tabBackgroundColor: PrimaryTheme.secundaryColor,
       tabs: [
         GButton(
           icon: Icons.fitness_center,
-          text: 'Ejercicios',
+          text: 'Entrenamiento',
         ),
         GButton(
           icon: Icons.home,
@@ -29,7 +29,7 @@ class NavBar extends StatelessWidget {
         ),
         GButton(
           icon: Icons.fastfood_sharp,
-          text: 'Comida',
+          text: 'Alimentación',
         ),
       ],
     );

@@ -9,7 +9,7 @@ class CustomeAppbar extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: PrimaryTheme.secundaryColor.withOpacity(0.9),
+        color: Colors.black,
       ),
       child:  const Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -18,11 +18,11 @@ class CustomeAppbar extends StatelessWidget {
           children: [
             Text(
               'Enero',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Text(
               '¡Hoy es un buen día para entrenar!',
-              style: TextStyle(color: PrimaryTheme.backgroundColor),
+              style: TextStyle(color: Colors.white),
             ),
           ],
            ),

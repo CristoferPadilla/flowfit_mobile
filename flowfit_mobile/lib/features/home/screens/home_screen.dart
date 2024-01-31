@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SafeArea(
       child: Scaffold(
-        backgroundColor: PrimaryTheme.backgroundColor,
+        backgroundColor: Colors.white,
         bottomNavigationBar: NavBar(),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(90),
