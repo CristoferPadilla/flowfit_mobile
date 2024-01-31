@@ -9,13 +9,6 @@ class PrimaryTheme {
   static const Color backgroundColor = Color(0xFF070611); 
   
   //Theme
-  static final ThemeData DarkTheme = ThemeData.dark().copyWith(
-    brightness: Brightness.dark,
-    primaryColor: secundaryColor,
-    colorScheme: ColorScheme.fromSwatch().copyWith(
-      secondary:secundaryColor,
-      onError: Colors.red,
-      primaryContainer: Colors.amber,
-      tertiaryContainer: Colors.green,
-    ));
+  // ignore: non_constant_identifier_names
+  
 }
