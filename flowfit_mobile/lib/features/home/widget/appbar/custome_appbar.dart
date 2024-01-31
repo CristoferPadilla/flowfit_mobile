@@ -1,4 +1,3 @@
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomeAppbar extends StatelessWidget {
