@@ -2,7 +2,7 @@ import 'package:flowfit_mobile/features/home/widget/calendary/calendary_containe
 import 'package:flutter/material.dart';
 
 class ListCalendary extends StatelessWidget {
-  const ListCalendary({ Key? key}) : super(key: key);
+  const ListCalendary({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,15 @@ class ListCalendary extends StatelessWidget {
           final dayOfWeek = index % 7;
           final day = _getDayOfWeek(dayOfWeek);
           final date = (index + 1).toString();
-          return CalendaryContainer(
-            day: day,
-            date: date,
+          final isToday = _isToday(dayOfWeek);
+
+          return Transform.scale(
+            scale: isToday ? 1.2 : 1.0,
+            child: CalendaryContainer(
+              day: day,
+              date: date,
+              color: isToday ? Colors.red : null,
+            ),
           );
         },
       ),
@@ -44,5 +50,11 @@ class ListCalendary extends StatelessWidget {
       default:
         return '';
     }
+  }
+
+  bool _isToday(int dayOfWeek) {
+    final now = DateTime.now();
+    final currentDayOfWeek = now.weekday - 1;
+    return dayOfWeek == currentDayOfWeek;
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CalendaryContainer extends StatelessWidget {
   final String day;
   final String date;
-  const CalendaryContainer({super.key, required this.day, required this.date});
+  const CalendaryContainer({super.key, required this.day, required this.date, MaterialColor? color});
 
   @override
   Widget build(BuildContext context) {
