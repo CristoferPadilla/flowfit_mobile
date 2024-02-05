@@ -11,7 +11,7 @@ class ListCalendary extends StatelessWidget {
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 30,
+        itemCount: 29,
         itemBuilder: (context, index) {
           final dayOfWeek = index % 7;
           final day = _getDayOfWeek(dayOfWeek);

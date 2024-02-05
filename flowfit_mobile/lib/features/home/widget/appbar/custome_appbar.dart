@@ -7,7 +7,7 @@ class CustomeAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.black,
       ),
       child:  const Column(
@@ -16,7 +16,7 @@ class CustomeAppbar extends StatelessWidget {
           Column(
           children: [
             Text(
-              'Enero',
+              'Febrero',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Text(
