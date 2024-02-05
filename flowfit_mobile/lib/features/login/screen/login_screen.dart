@@ -1,5 +1,4 @@
-import 'package:flowfit_mobile/features/home/widget/list/list_navbar.dart';
-import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
+import 'package:flowfit_mobile/features/first-steps/screens/first_steps.dart';
 import 'package:flowfit_mobile/features/login/widget/text/title_text.dart';
 import 'package:flowfit_mobile/features/login/widget/textfield/custome_textfield.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
@@ -99,7 +98,7 @@ class LoginScreen extends StatelessWidget {
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.fade,
-                                    child: const NavBar(), //const HomeScreen(),
+                                    child: const FirstStepsScreen(), //const HomeScreen(),
                                     inheritTheme: true,
                                     ctx: context),
                               );

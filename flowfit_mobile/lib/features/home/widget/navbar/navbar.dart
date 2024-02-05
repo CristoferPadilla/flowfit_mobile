@@ -17,37 +17,40 @@ class NavBarState extends State<NavBar> {
     return SafeArea(
       child: Scaffold(
         body: navScreens[selectedindex], 
-        bottomNavigationBar: GNav(
-          haptic: true,
-          rippleColor: Colors.grey,
-          hoverColor: Colors.grey,
-          activeColor: Colors.white,
-          iconSize: 40,
-          color: Colors.black,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          duration: const Duration(milliseconds: 50),
-          tabBorderRadius: 3,
-          tabBackgroundColor: PrimaryTheme.secundaryColor,
-          tabs: const [
-            GButton(
-              icon: Icons.home,
-              text: 'Menú',
-            ),
-            GButton(
-              icon: Icons.fitness_center,
-              text: 'Entrenamiento',
-            ),
-            GButton(
-              icon: Icons.fastfood_sharp,
-              text: 'Alimentación',
-            ),
-          ],
-          selectedIndex: selectedindex,
-          onTabChange: (index) {
-            setState(() {
-              selectedindex = index;
-            });
-          },
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GNav(
+            haptic: true,
+            rippleColor: Colors.grey,
+            hoverColor: Colors.grey,
+            activeColor: Colors.white,
+            iconSize: 40,
+            color: Colors.black,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            duration: const Duration(milliseconds: 50),
+            tabBorderRadius: 3,
+            tabBackgroundColor: PrimaryTheme.secundaryColor,
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: 'Menú',
+              ),
+              GButton(
+                icon: Icons.fitness_center,
+                text: 'Entrenamiento',
+              ),
+              GButton(
+                icon: Icons.fastfood_sharp,
+                text: 'Alimentación',
+              ),
+            ],
+            selectedIndex: selectedindex,
+            onTabChange: (index) {
+              setState(() {
+                selectedindex = index;
+              });
+            },
+          ),
         ),
       ),
     );
