@@ -3,6 +3,8 @@
         android:label="flowfit_mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCFnaMmq-tbaGBIbj14NK0nofQtWZ6PNVI"/>
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCFnaMmq-tbaGBIbj14NK0nofQtWZ6PNVI"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

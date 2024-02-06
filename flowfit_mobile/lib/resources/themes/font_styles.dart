@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class FontStyle {
   // Estilos para títulos
-  static const TextStyle titleTextStyle = TextStyle(
+  static   TextStyle titleTextStyle = const TextStyle(
     fontSize: 24.0,
     fontWeight: FontWeight.bold,
     color: Colors.black,

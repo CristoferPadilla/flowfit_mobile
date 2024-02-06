@@ -12,8 +12,10 @@ dependencies:
   page_transition: "^2.1.0"
   google_nav_bar: ^5.0.6
   flutter_svg: ^0.22.0
-  http: ^0.13.3
   showcaseview: ^2.0.3
+  google_static_maps_controller: ^1.0.0
+
+
 
 
 dev_dependencies:
