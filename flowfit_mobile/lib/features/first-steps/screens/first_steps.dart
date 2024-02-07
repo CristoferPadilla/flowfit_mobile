@@ -82,7 +82,7 @@ class FirstStepsScreen extends StatelessWidget {
                   ]),
                 )),
                 const Spacer(),               
-                const SectionButtons(isBackButtonVisible: false, screen: SecondStepScreen(),)
+                const SectionButtons(isBackButtonVisible: false, screen: SecondStepScreen(),isFrontButtonVisible: true,)
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:flowfit_mobile/features/exercises/screens/description_exercise_screen.dart';
 import 'package:flutter/material.dart';
 
 class ContainerExercice extends StatelessWidget {
@@ -6,41 +7,42 @@ class ContainerExercice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 150,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child:  Column(
-        children: [
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.fitness_center,
-                  color: Colors.black,
-                  size: 20,
-                ),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: GestureDetector(
+        onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DescriptionExerciseScreen()
+          ),);  },
+        child: Container(
+          width: double.infinity,
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: const Offset(0, 3),
               ),
-              Text(
-                bodyPart,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-
             ],
           ),
-        ],
+          child:  Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  bodyPart,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black, ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:flowfit_mobile/features/alimentation/screens/alimentation_screen.dart';
+import 'package:flowfit_mobile/features/profile/screens/profile_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/exercise_screen.dart';
 import 'package:flowfit_mobile/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,6 @@ final List<Widget> navScreens = <Widget>[
       autoPlay: true,
       autoPlayDelay: const Duration(milliseconds: 5000),
       scrollDuration: const Duration(seconds: 3),
-      builder: Builder(builder: ((context) => const AlimentationScreen()))),
+      builder: Builder(builder: ((context) => const ProfileScreen()))),
 
 ];

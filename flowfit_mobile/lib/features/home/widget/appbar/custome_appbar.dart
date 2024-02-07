@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomeAppbar extends StatelessWidget {
-  const CustomeAppbar({super.key});
+  final String title;
+  final String subtitle;
+  const CustomeAppbar({super.key, required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +12,17 @@ class CustomeAppbar extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.black,
       ),
-      child:  const Column(
+      child:  Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
           children: [
             Text(
-              'Febrero',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
+              title,
+              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Text(
-              '¡Hoy es un buen día para entrenar!',
+              subtitle,
               style: TextStyle(color: Colors.white),
             ),
           ],

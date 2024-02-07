@@ -1,13 +1,13 @@
-import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
 class SectionButtons extends StatelessWidget {
   final bool isBackButtonVisible;
+  final bool isFrontButtonVisible;
   final Widget screen;
   const SectionButtons(
-      {Key? key, required this.isBackButtonVisible, required this.screen})
+      {Key? key, required this.isBackButtonVisible, required this.screen, required this.isFrontButtonVisible})
       : super(key: key);
 
   @override
@@ -46,6 +46,7 @@ class SectionButtons extends StatelessWidget {
                 ),
               ),
             ),
+                      if (isFrontButtonVisible == true)
           GestureDetector(
             onTap: () {
               Navigator.push(

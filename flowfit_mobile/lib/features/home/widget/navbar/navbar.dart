@@ -27,8 +27,9 @@ class NavBarState extends State<NavBar> {
             iconSize: 40,
             color: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            duration: const Duration(milliseconds: 50),
-            tabBorderRadius: 3,
+            curve: Curves.easeInCubic,
+            duration: const Duration(seconds: 1),
+            tabBorderRadius: 50,
             tabBackgroundColor: PrimaryTheme.secundaryColor,
             tabs: const [
               GButton(
@@ -40,8 +41,8 @@ class NavBarState extends State<NavBar> {
                 text: 'Entrenamiento',
               ),
               GButton(
-                icon: Icons.fastfood_sharp,
-                text: 'Alimentación',
+                icon: Icons.person,
+                text: 'Perfil',
               ),
             ],
             selectedIndex: selectedindex,

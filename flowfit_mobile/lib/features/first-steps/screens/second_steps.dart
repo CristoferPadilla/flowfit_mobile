@@ -50,7 +50,7 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
               },
             ),
             const Spacer(),
-            const SectionButtons(isBackButtonVisible: true, screen: NavBar())
+            const SectionButtons(isBackButtonVisible: true, screen: NavBar(), isFrontButtonVisible: true,)
           ],
         ),
       ),

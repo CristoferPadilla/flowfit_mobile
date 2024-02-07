@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
           child: Stack(
             alignment: Alignment.topRight,
             children: [
-            CustomeAppbar(),
+            CustomeAppbar(title: 'Febrero',subtitle: '¡Hoy es un gran día para entrenar',),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: IconProfile(),
