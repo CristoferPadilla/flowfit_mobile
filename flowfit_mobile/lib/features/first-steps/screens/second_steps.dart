@@ -1,6 +1,7 @@
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/slider/custome_slider.dart';
-import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
+import 'package:flowfit_mobile/features/first-steps/widget/title/custom_title.dart';
+import 'package:flowfit_mobile/features/profile/screens/profile_forms_screen.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
@@ -21,24 +22,8 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                '¡Ayúdanos a evaluarte !',
-                style: FontStyle.titleTextStyle.copyWith(
-                  color: PrimaryTheme.secundaryColor,
-                  fontSize: 50,
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
-                'Con tu conocimiento y tu esfuerzo, podremos ayudarte a alcanzar tus metas. Por favor, completa el siguiente cuestionario para conocerte un poco más.',
-                style: FontStyle.descriptionTextStyle,
-                textAlign: TextAlign.justify,
-              ),
-            ),
+            const CustomTitleSteps(title: '¡Ayúdanos a evaluarte !',
+            description: 'Con tu conocimiento y tu esfuerzo, podremos ayudarte a alcanzar tus metas. Por favor, completa el siguiente cuestionario para conocerte un poco más',) ,
             const SizedBox(height: 20),
             CustomSlider(
               title: '¿Cuál es tu nivel de experiencia en entrenamiento de fuerza?',
@@ -50,10 +35,11 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
               },
             ),
             const Spacer(),
-            const SectionButtons(isBackButtonVisible: true, screen: NavBar(), isFrontButtonVisible: true,)
+            const SectionButtons(isBackButtonVisible: true, screen: ProfileFormScreen(), isFrontButtonVisible: true,)
           ],
         ),
       ),
     );
   }
 }
+

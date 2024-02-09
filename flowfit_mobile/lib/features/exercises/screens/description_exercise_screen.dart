@@ -87,7 +87,7 @@ class DescriptionExerciseScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  Text('De pie, sostén una mancuerna en cada mano con los brazos extendidos hacia abajo y las palmas mirando hacia adelante. Mantén los codos pegados a los costados del cuerpo. Flexiona los brazos, levantando las mancuernas hacia los hombros. Haz una pausa en la posición superior, contrayendo los músculos del bíceps. Baja lentamente las mancuernas de nuevo a la posición inicial, manteniendo el control. Repite durante el número deseado de repeticiones.'),
+                  Text('De pie, sostén una mancuerna en cada mano con los brazos extendidos hacia abajo y las palmas mirando hacia adelante.\nMantén los codos pegados a los costados del cuerpo. \nFlexiona los brazos, levantando las mancuernas hacia los hombros.\nHaz una pausa en la posición superior, contrayendo los músculos del bíceps.\nBaja lentamente las mancuernas de nuevo a la posición inicial, manteniendo el control. \nRepite durante el número deseado de repeticiones.'),
                 ],
               ),
             ),
