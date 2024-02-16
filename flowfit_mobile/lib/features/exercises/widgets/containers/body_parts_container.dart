@@ -56,13 +56,16 @@ class ContainerExerciseBodyParts extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      bodypart,
-                      style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.white, ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        bodypart,
+                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white, ),
+                      ),
                     ),
                     Text(
                       subtitle,
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white, ),
+                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white, ),
                     ),
                   ],
                 ),

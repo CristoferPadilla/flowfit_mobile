@@ -1,6 +1,6 @@
-import 'package:flowfit_mobile/features/profile/screens/profile_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/exercise_screen.dart';
 import 'package:flowfit_mobile/features/home/screens/home_screen.dart';
+import 'package:flowfit_mobile/features/profile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 

@@ -19,9 +19,12 @@ class ContainerExercice extends StatelessWidget {
         child: Container(
           width: double.infinity,
           height: 100,
+          
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
+            image: const DecorationImage(
+              image: AssetImage('assets/jpg/Ejercicio3.jpeg'), ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),

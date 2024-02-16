@@ -28,7 +28,7 @@ class NavBarState extends State<NavBar> {
             color: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             curve: Curves.easeInCubic,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 400),
             tabBorderRadius: 50,
             tabBackgroundColor: PrimaryTheme.secundaryColor,
             tabs: const [

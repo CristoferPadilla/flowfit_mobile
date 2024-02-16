@@ -2,7 +2,7 @@ import 'package:flowfit_mobile/features/exercises/screens/body_part_screen.dart'
 import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/routine_option_container.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
-import 'package:flowfit_mobile/features/home/widget/profile/icon_profile.dart';
+import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile.dart';
 import 'package:flutter/material.dart';
 
 class ExercisesScreen extends StatelessWidget {

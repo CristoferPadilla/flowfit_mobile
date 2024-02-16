@@ -1,10 +1,8 @@
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/slider/custome_slider.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/title/custom_title.dart';
-import 'package:flowfit_mobile/features/profile/screens/profile_forms_screen.dart';
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
+import 'package:flowfit_mobile/features/profile/screens/profile_form_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 
 class SecondStepScreen extends StatefulWidget {
   const SecondStepScreen({Key? key}) : super(key: key);
