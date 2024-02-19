@@ -1,3 +1,4 @@
+import 'package:flowfit_mobile/features/analytics/screens/analytics_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/exercise_screen.dart';
 import 'package:flowfit_mobile/features/home/screens/home_screen.dart';
 import 'package:flowfit_mobile/features/profile/screens/profile_screen.dart';
@@ -18,6 +19,11 @@ final List<Widget> navScreens = <Widget>[
       autoPlayDelay: const Duration(milliseconds: 5000),
       scrollDuration: const Duration(seconds: 3),
       builder: Builder(builder: ((context) => const ExercisesScreen()))),
+  ShowCaseWidget(
+      autoPlay: true,
+      autoPlayDelay: const Duration(milliseconds: 5000),
+      scrollDuration: const Duration(seconds: 3),
+      builder: Builder(builder: ((context) => const AnalyticsScreen()))),
   ShowCaseWidget(
       autoPlay: true,
       autoPlayDelay: const Duration(milliseconds: 5000),

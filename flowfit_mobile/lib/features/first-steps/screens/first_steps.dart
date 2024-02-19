@@ -1,6 +1,5 @@
 import 'package:flowfit_mobile/features/first-steps/screens/second_steps.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
-import 'package:flowfit_mobile/features/first-steps/widget/dialog/googlemaps_dialog.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
@@ -41,46 +40,6 @@ class FirstStepsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
-                'Por favor, selecciona el gimnasio donde te ejercitas.',
-                style: FontStyle.descriptionTextStyle,
-                textAlign: TextAlign.justify,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: FilledButton(
-                  onPressed: () {
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (BuildContext context) {
-                    //     return const GoogleMapsDialog();
-                    //   },
-                    // );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const GoogleMapPick(),
-                      ),
-                    );
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: PrimaryTheme.secundaryColor,
-                  ),
-                  child: Row(children: [
-                    const Icon(Icons.search),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text('Seleccionar gimnasio',
-                        style: FontStyle.buttonTextStyle.copyWith(
-                          color: Colors.white,
-                        )),
-                  ]),
-                )),
                 const Spacer(),               
                 const SectionButtons(isBackButtonVisible: false, screen: SecondStepScreen(),isFrontButtonVisible: true,)
           ],

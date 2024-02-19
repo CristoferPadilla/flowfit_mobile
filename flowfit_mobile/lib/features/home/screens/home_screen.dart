@@ -1,5 +1,5 @@
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
-import 'package:flowfit_mobile/features/home/widget/list/list_calendary.dart';
+import 'package:flowfit_mobile/features/analytics/widgets/list/list_calendary.dart';
 import 'package:flowfit_mobile/features/home/widget/list/list_option.dart';
 import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile.dart';
 // import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
@@ -10,11 +10,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return  SafeArea(
       child: Scaffold(
         // bottomNavigationBar: NavBar() ,
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
+        backgroundColor: Colors.grey.shade100,
+        appBar: const PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: Stack(
             alignment: Alignment.topRight,
@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             )
           ]),
         ),
-        body: Column(
+        body: const Column(
           children: [
             ListCalendary(),
             ListOption(),

@@ -4,13 +4,13 @@ import 'package:flowfit_mobile/features/first-steps/widget/title/custom_title.da
 import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
 
 class ProfileFormScreen extends StatefulWidget {
-  const ProfileFormScreen({Key? key}) : super(key: key);
+  const ProfileFormScreen({super.key});
 
   @override
-  _ProfileFormScreenState createState() => _ProfileFormScreenState();
+  ProfileFormScreenState createState() => ProfileFormScreenState();
 }
 
-class _ProfileFormScreenState extends State<ProfileFormScreen> {
+class ProfileFormScreenState extends State<ProfileFormScreen> {
   late TextEditingController _ageController;
   late TextEditingController _weightController;
   late TextEditingController _heightController;

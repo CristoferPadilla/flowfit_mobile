@@ -1,6 +1,6 @@
 import 'package:flowfit_mobile/features/exercises/screens/body_part_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
-import 'package:flowfit_mobile/features/home/widget/calendary/calendary_container.dart';
+import 'package:flowfit_mobile/features/analytics/widgets/calendary/calendary_container.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';

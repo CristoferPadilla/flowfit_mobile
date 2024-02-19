@@ -23,7 +23,7 @@ class CustomeAppbar extends StatelessWidget {
             ),
             Text(
               subtitle,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           ],
            ),

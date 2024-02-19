@@ -20,13 +20,13 @@ class NavBarState extends State<NavBar> {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GNav(
-            haptic: true,
+            haptic: false,
             rippleColor: Colors.grey,
             hoverColor: Colors.grey,
             activeColor: Colors.white,
-            iconSize: 40,
+            iconSize: 25,
             color: Colors.black,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             curve: Curves.easeInCubic,
             duration: const Duration(milliseconds: 400),
             tabBorderRadius: 50,
@@ -39,6 +39,10 @@ class NavBarState extends State<NavBar> {
               GButton(
                 icon: Icons.fitness_center,
                 text: 'Entrenamiento',
+              ),
+              GButton(
+                icon: Icons.analytics,
+                text: 'Informe',
               ),
               GButton(
                 icon: Icons.person,
