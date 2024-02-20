@@ -1,12 +1,130 @@
+import 'package:flowfit_mobile/core/domain/responses/login_response.dart';
+import 'package:flutter/material.dart';
+import 'package:flowfit_mobile/core/data/data_source/remote/authentication_api.dart';
+import 'package:flowfit_mobile/core/data/helpers/http.dart';
+import 'package:flowfit_mobile/core/data/repositories_impl/repositories_implementatio.dart';
+import 'package:flowfit_mobile/core/domain/repositories/authentication_repository.dart';
 import 'package:flowfit_mobile/features/first-steps/screens/first_steps.dart';
 import 'package:flowfit_mobile/features/login/widget/text/title_text.dart';
 import 'package:flowfit_mobile/features/login/widget/textfield/custome_textfield.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
-import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late TextEditingController _usernameController;
+  late TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+ void _login() {
+  final http = Http(baseUrl: 'https://api-zydf.onrender.com');
+  final AuthenticationRepository auth = AuthenticationRepositoryImplementation(
+    AuthenticationAPI(http),
+  );
+
+  final username = _usernameController.text;
+  final password = _passwordController.text;
+
+  auth.login(username, password).then((loginResponse) {
+    switch (loginResponse) {
+      case LoginResponse.ok:
+        // Si la autenticación es exitosa, navega a la siguiente pantalla
+        print('Autenticación exitosa');
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            child: const FirstStepsScreen(),
+            inheritTheme: true,
+            ctx: context,
+          ),
+        );
+        break;
+      case LoginResponse.accesDenied:
+        // Si las credenciales son incorrectas, muestra un mensaje de error
+        print('Credenciales inválidas');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Credenciales inválidas. Por favor, inténtelo de nuevo.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        break;
+      case LoginResponse.networkError:
+        // Si hay un error de red, muestra un mensaje de error de red
+        print('Error de red durante el inicio de sesión');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Hubo un error de red durante el inicio de sesión. Por favor, inténtelo de nuevo.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        break;
+      case LoginResponse.unknownError:
+        // Si hay un error desconocido, muestra un mensaje de error desconocido
+        print('Error desconocido durante el inicio de sesión');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Hubo un error desconocido durante el inicio de sesión. Por favor, inténtelo de nuevo.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        break;
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +139,22 @@ class LoginScreen extends StatelessWidget {
               width: double.infinity,
               color: Colors.white,
             ),
-              Positioned(
-                top: height * 0.1,
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: const BoxDecoration(
-                    color: PrimaryTheme.backgroundColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.fitness_center,
-                    color: Colors.white,
-                    size: 80,
-                  ),
+            Positioned(
+              top: height * 0.1,
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: const BoxDecoration(
+                  color: PrimaryTheme.backgroundColor,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.fitness_center,
+                  color: Colors.white,
+                  size: 80,
                 ),
               ),
+            ),
             Container(
               height: height * 0.7,
               decoration: const BoxDecoration(
@@ -52,97 +170,93 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 50),
-                  const CustomeTextTitle(
-                    title: 'FlowFit',
-                    size: 40,
-                  ),
-                  const SizedBox(height: 50),
-                  const CustomeTextTitle(title: 'Iniciar sesión', size: 20),
-                  const SizedBox(height: 50),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Column(
-                      children: [
-                        const CustomeTextField(
-                          title: 'Usuario',
-                          type: TextInputType.text,
-                          isPassword: false,
-                        ),
-                        const SizedBox(height: 20),
-                        const CustomeTextField(
-                          title: 'Contraseña',
-                          type: TextInputType.visiblePassword,
-                          isPassword: true,
-                        ),
-                        const SizedBox(height: 20),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '¿Olvidaste tu contraseña?',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.fade,
-                                    child: const FirstStepsScreen(), //const HomeScreen(),
-                                    inheritTheme: true,
-                                    ctx: context),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            child: const Text(
-                              'Iniciar sesión',
-                              style:
-                                  TextStyle(color: PrimaryTheme.backgroundColor),
-                            ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 50),
+                    const CustomeTextTitle(
+                      title: 'FlowFit',
+                      size: 40,
+                    ),
+                    const SizedBox(height: 50),
+                    const CustomeTextTitle(title: 'Iniciar sesión', size: 20),
+                    const SizedBox(height: 50),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: Column(
+                        children: [
+                          CustomeTextField(
+                            title: 'Usuario',
+                            type: TextInputType.text,
+                            isPassword: false,
+                            controller: _usernameController,
+            
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              '¿No tienes una cuenta?',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                'Regístrate',
+                          const SizedBox(height: 20),
+                          CustomeTextField(
+                            title: 'Contraseña',
+                            type: TextInputType.visiblePassword,
+                            isPassword: true,
+                            controller: _passwordController,
+
+                          ),
+                          const SizedBox(height: 20),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                '¿Olvidaste tu contraseña?',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: const Text(
+                                'Iniciar sesión',
+                                style: TextStyle(color: PrimaryTheme.backgroundColor),
+                              ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                '¿No tienes una cuenta?',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () {},
+                                child: const Text(
+                                  'Regístrate',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
