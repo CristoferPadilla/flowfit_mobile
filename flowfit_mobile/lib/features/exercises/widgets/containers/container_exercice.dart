@@ -2,8 +2,11 @@ import 'package:flowfit_mobile/features/exercises/screens/description_exercise_s
 import 'package:flutter/material.dart';
 
 class ContainerExercice extends StatelessWidget {
-  final String bodyPart;
-  const ContainerExercice({super.key, required this.bodyPart});
+  final String name;
+  final String gifUrl;
+  final String? bodyPart;
+  final String? instruction;
+  const ContainerExercice({super.key, required this.name, required this.gifUrl, this.bodyPart, this.instruction});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class ContainerExercice extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DescriptionExerciseScreen()
+            builder: (context) =>  DescriptionExerciseScreen(name: name, gifUrl: gifUrl,)
           ),);  },
         child: Container(
           width: double.infinity,
@@ -23,8 +26,8 @@ class ContainerExercice extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            image: const DecorationImage(
-              image: AssetImage('assets/jpg/Ejercicio3.jpeg'), ),
+            image:  DecorationImage(
+              image: NetworkImage(gifUrl), ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -39,7 +42,7 @@ class ContainerExercice extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  bodyPart,
+                  name,
                   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black, ),
                 ),
               ),

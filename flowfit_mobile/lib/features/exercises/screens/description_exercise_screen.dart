@@ -3,14 +3,19 @@ import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionExerciseScreen extends StatelessWidget {
-  const DescriptionExerciseScreen({Key? key}) : super(key: key);
+    final String name;
+  final String gifUrl;
+  final String? bodyPart;
+  final String? instruction;
+
+  const DescriptionExerciseScreen({Key? key, required this.name, required this.gifUrl, this.bodyPart, this.instruction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return  SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: PreferredSize(
+        appBar: const PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: CustomeAppbar(
             title: 'Aprende',
@@ -21,29 +26,29 @@ class DescriptionExerciseScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: SizedBox(
                 height: 200, 
                 child: Placeholder(
-                  child: Image(image: AssetImage("assets/example.gif")),
+                  child: Image(image: NetworkImage(gifUrl)),
                 )
               ),
             ),
-            SizedBox(height: 20), 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+            const SizedBox(height: 20), 
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Nombre del ejercicio:  ',
-                    style: TextStyle(
+                    style:  TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'Curl de bíceps',
-                    style: TextStyle(
+                    name,
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
@@ -51,12 +56,12 @@ class DescriptionExerciseScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+            const SizedBox(height: 10),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Área que se entrena:  ',
                     style: TextStyle(
                       fontSize: 15,
@@ -64,8 +69,8 @@ class DescriptionExerciseScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Brazo',
-                    style: TextStyle(
+                    bodyPart ?? 'No disponible',
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
@@ -73,25 +78,25 @@ class DescriptionExerciseScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20), 
+            const SizedBox(height: 20), 
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Instrucciones',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  Text('De pie, sostén una mancuerna en cada mano con los brazos extendidos hacia abajo y las palmas mirando hacia adelante.\nMantén los codos pegados a los costados del cuerpo. \nFlexiona los brazos, levantando las mancuernas hacia los hombros.\nHaz una pausa en la posición superior, contrayendo los músculos del bíceps.\nBaja lentamente las mancuernas de nuevo a la posición inicial, manteniendo el control. \nRepite durante el número deseado de repeticiones.'),
+                  Text(instruction ?? "No disponible"),
                 ],
               ),
             ),
-            Spacer(),
-            SectionButtons(isBackButtonVisible: true,isFrontButtonVisible: false, screen: DescriptionExerciseScreen(),)
+            const Spacer(),
+             SectionButtons(isBackButtonVisible: true,isFrontButtonVisible: false, screen: DescriptionExerciseScreen(name:name, gifUrl: gifUrl),)
 
           ],
         ),
