@@ -6,9 +6,9 @@ class DescriptionExerciseScreen extends StatelessWidget {
     final String name;
   final String gifUrl;
   final String? bodyPart;
-  final String? instruction;
+  final String? instructions;
 
-  const DescriptionExerciseScreen({Key? key, required this.name, required this.gifUrl, this.bodyPart, this.instruction}) : super(key: key);
+  const DescriptionExerciseScreen({Key? key, required this.name, required this.gifUrl, this.bodyPart, this.instructions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class DescriptionExerciseScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  Text(instruction ?? "No disponible"),
+                  Text(instructions ?? "No disponible"),
                 ],
               ),
             ),

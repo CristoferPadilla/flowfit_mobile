@@ -6,17 +6,17 @@ import 'dart:convert';
 class Exercise {
   final String name;
   final String gifUrl;
-  final String? bodyPart;
-  final String? instruction;
+  final dynamic bodyPart;
+  final dynamic instructions;
 
-  Exercise({this.bodyPart, this.instruction, required this.name, required this.gifUrl});
+  Exercise({this.bodyPart, this.instructions, required this.name, required this.gifUrl});
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
       name: json['name'],
       gifUrl: json['gifUrl'],
       bodyPart: json['bodyPart'],
-      instruction: json['instruction'],
+      instructions: json['instructions'],
     );
   }
 }
@@ -76,7 +76,7 @@ class _GridViewContainerState extends State<GridViewContainer> {
     final itemCount = exercises.length < 10 ? exercises.length : 10;
 
     return _isLoading
-        ? Center(child: CircularProgressIndicator()) 
+        ? const Center(child: CircularProgressIndicator()) 
         : SizedBox(
             height: height * 0.75,
             width: double.infinity,
@@ -89,8 +89,8 @@ class _GridViewContainerState extends State<GridViewContainer> {
                   child: ContainerExercice(
                     name: exercise.name,
                     gifUrl: exercise.gifUrl,
-                    instruction: exercise.instruction,
-                    bodyPart: exercise.bodyPart,
+                    instructions: exercise.instructions is String ? exercise.instructions : exercise.instructions.join(', '),
+                    bodyPart:   exercise.bodyPart is String ? exercise.bodyPart : exercise.bodyPart.join(', '),
                   ),
                 );
               }),

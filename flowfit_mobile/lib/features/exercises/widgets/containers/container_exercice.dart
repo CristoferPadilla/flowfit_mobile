@@ -5,8 +5,8 @@ class ContainerExercice extends StatelessWidget {
   final String name;
   final String gifUrl;
   final String? bodyPart;
-  final String? instruction;
-  const ContainerExercice({super.key, required this.name, required this.gifUrl, this.bodyPart, this.instruction});
+  final String? instructions;
+  const ContainerExercice({super.key, required this.name, required this.gifUrl, this.bodyPart, this.instructions});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ContainerExercice extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  DescriptionExerciseScreen(name: name, gifUrl: gifUrl,)
+            builder: (context) =>  DescriptionExerciseScreen(name: name, gifUrl: gifUrl, instructions: instructions, bodyPart: bodyPart,)
           ),);  },
         child: Container(
           width: double.infinity,
