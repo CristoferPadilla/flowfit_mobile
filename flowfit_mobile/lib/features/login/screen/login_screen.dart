@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:flowfit_mobile/core/domain/responses/login_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/core/data/data_source/remote/authentication_api.dart';
