@@ -9,7 +9,11 @@ class SelectExercisesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return  SafeArea(
       child: Scaffold(
-        backgroundColor: PrimaryTheme.backgroundColor.withOpacity(0.9),
+        appBar: AppBar(
+        backgroundColor: Colors.grey.shade100,
+          title: const Text('¡Encuentra el mejor ejercicio para ti!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
+        ),
+        backgroundColor: Colors.grey.shade100,
         body: const SingleChildScrollView(
           child: Column(
             children: [
@@ -17,13 +21,15 @@ class SelectExercisesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(child: Text('¡Encuentra el mejor ejercicio para ti!', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold))),
-                  ),
-                  Padding(
                     padding: EdgeInsets.all(15.0),
                     child: SearchBar(
-                      leading: Icon(Icons.search),
+                      textStyle: MaterialStatePropertyAll(TextStyle(color: Colors.white)),
+                      surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                      overlayColor: MaterialStatePropertyAll(PrimaryTheme.secundaryColor),
+                      backgroundColor: MaterialStatePropertyAll(
+                        PrimaryTheme.secundaryColor
+                      ),
+                      leading: Icon(Icons.search,color: Colors.white,),
                       hintText: 'Buscar ejercicio',
                     ),
                   ),

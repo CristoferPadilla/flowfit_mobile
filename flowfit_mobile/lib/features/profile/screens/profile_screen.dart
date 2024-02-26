@@ -1,4 +1,5 @@
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
+import 'package:flowfit_mobile/features/scanner/screen/scanner_screen.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,20 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: IconButton.filled(
+            iconSize: 40,
+            style: const ButtonStyle(
+                backgroundColor:
+                    MaterialStatePropertyAll(PrimaryTheme.secundaryColor)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MobileScannerScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.qr_code_scanner_outlined)),
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: Stack(alignment: Alignment.topRight, children: [
@@ -34,7 +49,8 @@ class ProfileScreen extends StatelessWidget {
                       height: 150,
                       decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 128, 128, 128),
-                        border: Border.fromBorderSide(BorderSide(color: PrimaryTheme.secundaryColor, width: 3)),
+                        border: Border.fromBorderSide(BorderSide(
+                            color: PrimaryTheme.secundaryColor, width: 3)),
                         shape: BoxShape.circle,
                       ),
                       child: ClipOval(
@@ -77,22 +93,22 @@ class ProfileScreen extends StatelessWidget {
               title: 'Nivel: ',
               name: 'Principiante',
             ),
-            const Row(
-              children: [
-                CustomFielData(
-                  title: 'Edad: ',
-                  name: '20',
-                ),
-                CustomFielData(
-                  title: 'Peso: ',
-                  name: '70',
-                ),
-                CustomFielData(
-                  title: 'Estatura: ',
-                  name: '1.60',
-                ),
-              ],
-            ),
+            // const Row(
+            //   children: [
+            //     CustomFielData(
+            //       title: 'Edad: ',
+            //       name: '20',
+            //     ),
+            //     CustomFielData(
+            //       title: 'Peso: ',
+            //       name: '70',
+            //     ),
+            //     CustomFielData(
+            //       title: 'Estatura: ',
+            //       name: '1.60',
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -103,33 +119,54 @@ class ProfileScreen extends StatelessWidget {
 class CustomFielData extends StatelessWidget {
   final String title;
   final String name;
+
   const CustomFielData({
-    super.key,
+    Key? key,
     required this.title,
     required this.name,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: FontStyle.titleTextStyle.copyWith(
-              color: Colors.black,
-              fontSize: 20,
-            ),
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        elevation: 1,
+        color: PrimaryTheme.secundaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    title,
+                    style: FontStyle.titleTextStyle.copyWith(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    name,
+                    style: FontStyle.descriptionTextStyle.copyWith(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: (){},
+                child: const Icon(Icons.navigate_next_outlined, color: Colors.white,),
+              )
+            ],
           ),
-          Text(
-            name,
-            style: FontStyle.descriptionTextStyle.copyWith(
-              color: Colors.black,
-              fontSize: 18,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

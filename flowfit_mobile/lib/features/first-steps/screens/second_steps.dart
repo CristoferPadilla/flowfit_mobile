@@ -1,7 +1,7 @@
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/slider/custome_slider.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/title/custom_title.dart';
-import 'package:flowfit_mobile/features/profile/screens/profile_form_screen.dart';
+import 'package:flowfit_mobile/features/profile/widget/form/profile_form_screen.dart';
 import 'package:flutter/material.dart';
 
 class SecondStepScreen extends StatefulWidget {

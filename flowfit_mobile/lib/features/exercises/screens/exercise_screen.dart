@@ -10,9 +10,9 @@ class ExercisesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return  SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(
+        appBar: const PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: Stack(
             alignment: Alignment.topRight,
@@ -25,8 +25,8 @@ class ExercisesScreen extends StatelessWidget {
             ],
           ),
         ),
-        backgroundColor: Colors.white,
-        body: Column(
+        backgroundColor: Colors.grey.shade100,
+        body: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -60,6 +60,34 @@ class ExercisesScreen extends StatelessWidget {
                         Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
+                'Rutinas establecidas',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Selecciona la rutina acorde a tu nivel',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            RoutineOptionContainer(
+              icon: Icons.search,
+              title: 'Buscar rutina',
+              description: "Inicia con la mejor rutina para tí",
+              screen: SelectExercisesScreen(),
+            ),
+                        Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
                 'Prueba tu rutina aquí',
                 style: TextStyle(
                   color: Colors.black,
@@ -80,7 +108,7 @@ class ExercisesScreen extends StatelessWidget {
               ),
             ),
             RoutineOptionContainer(
-              icon: Icons.slow_motion_video_outlined,
+              icon: Icons.play_circle_outline,
               title: 'Empezar rutina',
               description: '',
               screen: SelectExercisesScreen(),

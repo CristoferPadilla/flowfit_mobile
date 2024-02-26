@@ -3,18 +3,26 @@ import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionExerciseScreen extends StatelessWidget {
-    final String name;
+  final String name;
   final String gifUrl;
   final String? bodyPart;
   final String? instructions;
 
-  const DescriptionExerciseScreen({Key? key, required this.name, required this.gifUrl, this.bodyPart, this.instructions}) : super(key: key);
+  const DescriptionExerciseScreen({
+    Key? key,
+    required this.name,
+    required this.gifUrl,
+    this.bodyPart,
+    this.instructions,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
+    String? formattedInstructions = instructions?.replaceAll(',','\n');
+
+    return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade100,
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: CustomeAppbar(
@@ -28,20 +36,28 @@ class DescriptionExerciseScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: SizedBox(
-                height: 200, 
+                height: 250,
+                width: double.infinity,
                 child: Placeholder(
-                  child: Image(image: NetworkImage(gifUrl)),
-                )
+                  child: Image(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(
+                      gifUrl,
+                    ),
+                    width: double.infinity,
+                    height: 250,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 20), 
-             Padding(
+            const SizedBox(height: 20),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
                   const Text(
                     'Nombre del ejercicio:  ',
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
@@ -57,7 +73,7 @@ class DescriptionExerciseScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-             Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
@@ -78,9 +94,8 @@ class DescriptionExerciseScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20), 
-
-             Padding(
+            const SizedBox(height: 20),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
@@ -91,13 +106,19 @@ class DescriptionExerciseScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  Text(instructions ?? "No disponible"),
+                  Text(formattedInstructions ?? "No disponible"),
                 ],
               ),
             ),
             const Spacer(),
-             SectionButtons(isBackButtonVisible: true,isFrontButtonVisible: false, screen: DescriptionExerciseScreen(name:name, gifUrl: gifUrl),)
-
+            SectionButtons(
+              isBackButtonVisible: true,
+              isFrontButtonVisible: false,
+              screen: DescriptionExerciseScreen(
+                name: name,
+                gifUrl: gifUrl,
+              ),
+            )
           ],
         ),
       ),

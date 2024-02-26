@@ -1,5 +1,4 @@
 import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
 
@@ -28,14 +27,14 @@ class ContainerExerciseBodyParts extends StatelessWidget {
             width: double.infinity,
             height: 100,
             decoration: BoxDecoration(
-              color: PrimaryTheme.backgroundColor.withOpacity(0.1),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey,
                   spreadRadius: 2,
                   blurRadius: 2,
-                  offset: const Offset(0, 3),
+                  offset: Offset(0, 3),
                 ),
               ],
             ),
@@ -46,7 +45,7 @@ class ContainerExerciseBodyParts extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.settings_accessibility_outlined,
-                  color: Colors.white,
+                  color: Colors.black,
                   size: 50,
                 ),
               ),
@@ -60,12 +59,12 @@ class ContainerExerciseBodyParts extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
                         bodypart,
-                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white, ),
+                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black, ),
                       ),
                     ),
                     Text(
                       subtitle,
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white, ),
+                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, ),
                     ),
                   ],
                 ),
