@@ -50,7 +50,9 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
       ),
       body: MobileScanner(
 
-        controller: cameraController,
+        controller: MobileScannerController(
+          detectionSpeed: DetectionSpeed.noDuplicates,
+        ),
         onDetect: (capture) async {
           final List<Barcode> barcodes = capture.barcodes;
           for (final barcode in barcodes) {
