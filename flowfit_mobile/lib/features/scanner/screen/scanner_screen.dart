@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -62,7 +60,7 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
               final success = await sendDataToAPI(endpoint);
               if (success) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Datos enviados correctamente')),
+                  SnackBar(content: Text('Datos enviados correctamente'), duration: Durations.short4),
                 ); 
               }
             }

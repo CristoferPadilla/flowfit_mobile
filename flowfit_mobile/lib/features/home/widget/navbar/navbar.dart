@@ -41,6 +41,10 @@ class NavBarState extends State<NavBar> {
                 text: 'Entrenamiento',
               ),
               GButton(
+                icon: Icons.shopping_bag,
+                text: 'Tienda',
+              ),
+              GButton(
                 icon: Icons.analytics,
                 text: 'Informe',
               ),

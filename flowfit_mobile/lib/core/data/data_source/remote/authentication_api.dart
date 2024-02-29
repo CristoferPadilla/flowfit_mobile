@@ -22,6 +22,7 @@ class AuthenticationAPI {
       if (result.statusCode == 200) {
         final accessToken = result.data['accessToken'];
         final id = result.data['member']['id'];
+        final profilePicture = result.data['member']['profile_picture'];
 
         // final id = result.data['id'];
         if (accessToken != null) {
@@ -29,8 +30,13 @@ class AuthenticationAPI {
           await prefs.setString('username', username);
           await prefs.setString('accessToken', accessToken);
           await prefs.setString('id', id.toString());
+          await prefs.setString('picture_profile', profilePicture);
+
+
           print('AccessToken: $accessToken');
           print('ID del usuario: $id');
+          print('Usuario es: $username');
+          print('La foto es: $profilePicture');
         } else {
           print('Error: AccessToken no encontrado en la respuesta.');
         }

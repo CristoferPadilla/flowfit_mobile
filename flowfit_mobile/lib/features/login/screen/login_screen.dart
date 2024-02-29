@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flowfit_mobile/core/domain/responses/login_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/core/data/data_source/remote/authentication_api.dart';
@@ -8,7 +10,6 @@ import 'package:flowfit_mobile/features/first-steps/screens/first_steps.dart';
 import 'package:flowfit_mobile/features/login/widget/text/title_text.dart';
 import 'package:flowfit_mobile/features/login/widget/textfield/custome_textfield.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
-import 'package:flutter/widgets.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,11 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Autenticación exitosa');
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('username', username);
-
       final accessToken = prefs.getString('accessToken') ?? '';
+      final picture_profile = prefs.getString('picture_profile') ?? '';
       print('AccessToken: $accessToken');
       final id = prefs.getString('id') ?? '';
       print('Id member: $id');
+                print('Usuario es: $username');
+                print('La foto  es: $picture_profile');
+
 
       Navigator.push(
         context,
