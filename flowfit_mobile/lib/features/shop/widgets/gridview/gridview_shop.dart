@@ -56,7 +56,7 @@ class _GridViewShopState extends State<GridViewShop> {
         }).toList();
       });
     } else {
-      throw Exception('Failed to load products');
+       Text('Failed to load products');
     }
   }
 
@@ -67,7 +67,7 @@ class _GridViewShopState extends State<GridViewShop> {
       height: height * 0.65,
       width: double.infinity,
       child: products.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GridView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: products.length,
@@ -75,7 +75,7 @@ class _GridViewShopState extends State<GridViewShop> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
-                childAspectRatio: 0.8,
+                childAspectRatio: 0.66,
               ),
               itemBuilder: (context, index) {
                 final product = products[index];

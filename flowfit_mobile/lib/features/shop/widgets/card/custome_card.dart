@@ -24,7 +24,7 @@ class CustomCard extends StatelessWidget {
          Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProductDetailsScreen(),
+                  builder: (context) =>  ProductDetailsScreen(description: description,name:name,imagePath: imagePath,price: price,),
                 ),
               );
       },
