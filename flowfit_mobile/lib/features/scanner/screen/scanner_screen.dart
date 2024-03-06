@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +46,6 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
         ],
       ),
       body: MobileScanner(
-
         controller: MobileScannerController(
           detectionSpeed: DetectionSpeed.noDuplicates,
         ),
@@ -60,8 +58,11 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
               final success = await sendDataToAPI(endpoint);
               if (success) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Datos enviados correctamente'), duration: Durations.short4),
-                ); 
+                  const SnackBar(
+                      content: const Text('Datos enviados correctamente'),
+                      duration: Duration(milliseconds: 2000)),
+                );
+                Navigator.pop(context);
               }
             }
           }
@@ -94,9 +95,9 @@ class _MobileScannerScreenState extends State<MobileScannerScreen> {
         debugPrint('Endpoint: $endpoint');
         debugPrint('AccessToken: $accessToken');
 
-        final uri = Uri.parse(endpoint); 
+        final uri = Uri.parse(endpoint);
         final response = await http.post(
-          uri, 
+          uri,
           headers: {
             'Authorization': 'Bearer $accessToken',
             'Content-Type': 'application/json',
