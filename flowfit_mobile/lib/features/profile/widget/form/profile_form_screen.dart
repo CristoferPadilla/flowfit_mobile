@@ -44,7 +44,6 @@ class ProfileFormScreenState extends State<ProfileFormScreen> {
               ),
               const SizedBox(height: 20),
               const Text('Sobre ti', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              _buildTextField(label: 'Edad', controller: _ageController),
               _buildTextField(label: 'Peso', controller: _weightController),
               _buildTextField(label: 'Estatura', controller: _heightController),
               const SizedBox(height: 30,),

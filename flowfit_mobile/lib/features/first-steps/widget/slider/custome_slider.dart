@@ -1,33 +1,54 @@
 import 'package:flutter/material.dart';
 
-class CustomSlider extends StatelessWidget {
-  final String title;
+class CustomSlider extends StatefulWidget {
   final double value;
   final ValueChanged<double>? onChanged;
+  final ValueChanged<double>? onChangeEnd;
 
-  const CustomSlider({super.key, 
-    required this.title,
+  const CustomSlider({
+    Key? key,
     required this.value,
     this.onChanged,
-  });
+    this.onChangeEnd,
+  }) : super(key: key);
+
+  @override
+  _CustomSliderState createState() => _CustomSliderState();
+}
+
+class _CustomSliderState extends State<CustomSlider> {
+  double _currentValue = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.value;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
         Slider(
-          value: value,
-          onChanged: onChanged,
+          value: _currentValue,
+          onChanged: (value) {
+            setState(() {
+              _currentValue = value;
+            });
+            if (widget.onChanged != null) {
+              widget.onChanged!(value);
+            }
+          },
+          onChangeEnd: (value) {
+            if (widget.onChangeEnd != null) {
+              widget.onChangeEnd!(value);
+            }
+          },
           min: 1,
           max: 3,
           divisions: 2,
-          label: value.round().toString(),
+          label: _currentValue.round().toString(),
         ),
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

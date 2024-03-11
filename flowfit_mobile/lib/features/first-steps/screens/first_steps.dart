@@ -34,7 +34,7 @@ class FirstStepsScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(
-                'Descubre una nueva forma de cuidar tu salud y bienestar. FlowFit te ofrece herramientas para gestionar tus actividades de ejercicio y mantener un control saludable de tu alimentación.',
+                'Descubre una nueva forma de cuidar tu salud y bienestar. FlowFit te ofrece herramientas para gestionar tus actividades de ejercicio y mantener un control correcto de la perfecta gestión de las rutinas de tus entrenamientos.',
                 style: FontStyle.descriptionTextStyle,
                 textAlign: TextAlign.justify,
               ),
