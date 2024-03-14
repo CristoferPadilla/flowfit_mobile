@@ -82,15 +82,15 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               )
-            else ...[ // Use the spread operator (...) to include multiple widgets conditionally
-              if (currentIndex < preguntas.length) // Only show question if not completed
+            else ...[ 
+              if (currentIndex < preguntas.length) 
                 Text(
                   preguntas[currentIndex].keys.first,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               const SizedBox(height: 20),
-              if (currentIndex < preguntas.length) // Only show slider if not completed and not at the end
+              if (currentIndex < preguntas.length) 
                 CustomSlider(
                   value: double.tryParse(valorRespuesta)?.clamp(1.0, 3.0) ?? 1.0,
                   onChanged: (value) {
