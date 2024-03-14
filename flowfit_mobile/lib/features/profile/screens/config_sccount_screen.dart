@@ -3,27 +3,32 @@ import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.d
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
-class ConfigAccountScreen extends StatelessWidget {
-  const ConfigAccountScreen({super.key});
+class ConfigAccountScreen extends StatefulWidget {
+  const ConfigAccountScreen({Key? key}) : super(key: key);
 
   @override
+  State<ConfigAccountScreen> createState() => _ConfigAccountScreenState();
+}
+
+class _ConfigAccountScreenState extends State<ConfigAccountScreen> {
+  @override
   Widget build(BuildContext context) {
-    return  SafeArea(
+    return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: PrimaryTheme.secundaryColor,
-          onPressed: (){
-
-        }, label: const Icon(Icons.edit, color: Colors.white,)),
+          onPressed: () {},
+          label: const Icon(Icons.edit, color: Colors.white),
+        ),
         appBar: AppBar(
           title: const Text('Configuración de cuenta'),
         ),
-        body:  const Column(
+        body: Column(
           children: [
-             IconProfileStack(isEdit: false,),
-             ContainerInfo()
+            IconProfileStack(isEdit: false),
+            ContainerInfo(),
           ],
-        )
+        ),
       ),
     );
   }
