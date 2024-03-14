@@ -1,9 +1,11 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/slider/custome_slider.dart';
 import 'package:flowfit_mobile/features/first-steps/widget/title/custom_title.dart';
 import 'package:flowfit_mobile/features/profile/widget/form/profile_form_screen.dart';
-import 'package:flutter/material.dart';
-
 class SecondStepScreen extends StatefulWidget {
   const SecondStepScreen({Key? key}) : super(key: key);
 
@@ -18,9 +20,7 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
     {'¿Con qué frecuencia haces ejercicio?': 2},
     {'¿Cuál es tu objetivo principal al hacer ejercicio?': 3},
     {'¿Qué tipo de dieta sigues?': 4},
-    {
-      '¿Tienes alguna lesión o condición médica que afecte tu capacidad para hacer ejercicio?': 5
-    },
+    {'¿Tienes alguna lesión o condición médica que afecte tu capacidad para hacer ejercicio?': 5},
     {'¿Cómo calificarías tu nivel de motivación para hacer ejercicio?': 6},
     {'¿Qué tan importante es para ti medir tus progresos?': 7},
     {'¿Qué tipo de ambiente de entrenamiento prefieres?': 8},
@@ -28,10 +28,24 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
   ];
 
   int currentIndex = 0;
-  int total = 0; // Variable to accumulate the sum of responses
+  int total = 0;
   bool encuestaTerminada = false;
+  late String accessToken;
+  late String userId;
 
-  void avanzarPregunta(int valorRespuesta) {
+  @override
+  void initState() {
+    super.initState();
+    obtenerDatosUsuario();
+  }
+
+  Future<void> obtenerDatosUsuario() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    accessToken = prefs.getString('accessToken') ?? '';
+    userId = prefs.getString('id') ?? '';
+  }
+
+  Future<void> avanzarPregunta(int valorRespuesta) async {
     setState(() {
       total += valorRespuesta;
       currentIndex++;
@@ -39,11 +53,10 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
       if (currentIndex < preguntas.length) {
         preguntas[currentIndex]['valor'] = valorRespuesta;
       } else {
-        // Handle end of questionnaire
         enviarResultadoAPI();
         reiniciarEncuesta();
         setState(() {
-          encuestaTerminada = true; // Show the message after actions
+          encuestaTerminada = true;
         });
       }
     });
@@ -57,9 +70,39 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
     }
   }
 
-  void enviarResultadoAPI() {
-    // Implement logic to send total to your API
-    print('Enviando resultado total a la API: $total');
+  Future<void> enviarResultadoAPI() async {
+    String nivel;
+
+    if (total >= 0 && total <= 10) {
+      nivel = 'Beginner';
+    } else if (total >= 11 && total <= 20) {
+      nivel = 'Intermediate';
+    } else {
+      nivel = 'Advanced';
+    }
+
+    String url = 'https://api-zydf.onrender.com/members/$userId';
+
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(<String, String>{
+          'level': nivel,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Nivel enviado correctamente a la API: $nivel');
+      } else {
+        print('Error al enviar el nivel a la API');
+      }
+    } catch (e) {
+      print('Error de conexión: $e');
+    }
   }
 
   @override
@@ -82,20 +125,18 @@ class _SecondStepScreenState extends State<SecondStepScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               )
-            else ...[ 
-              if (currentIndex < preguntas.length) 
+            else ...[
+              if (currentIndex < preguntas.length)
                 Text(
                   preguntas[currentIndex].keys.first,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               const SizedBox(height: 20),
-              if (currentIndex < preguntas.length) 
+              if (currentIndex < preguntas.length)
                 CustomSlider(
                   value: double.tryParse(valorRespuesta)?.clamp(1.0, 3.0) ?? 1.0,
-                  onChanged: (value) {
-                    print("Valor seleccionado mientras se arrastra: $value");
-                  },
+                  onChanged: (value) {},
                   onChangeEnd: (value) {
                     print("Valor seleccionado después de soltar el slider: $value");
                     avanzarPregunta(value.toInt());
