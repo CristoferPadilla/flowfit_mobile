@@ -39,29 +39,16 @@ class DescriptionExerciseScreen extends StatelessWidget {
               child: SizedBox(
                 height: 250,
                 width: double.infinity,
-                child: Stack(alignment: Alignment.bottomRight, children: [
-                  Placeholder(
-                    child: Image(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        gifUrl,
-                      ),
-                      width: double.infinity,
-                      height: 250,
+                child: Placeholder(
+                  child: Image(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(
+                      gifUrl,
                     ),
+                    width: double.infinity,
+                    height: 250,
                   ),
-                  Padding( 
-                    padding: const EdgeInsets.all(8.0),
-                    child: IconButton.filled(
-                      iconSize: 30,
-                        style: const ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                PrimaryTheme.secundaryColor)),
-                        color: Colors.white,
-                        onPressed: () {},
-                        icon: const Icon(Icons.add_circle_outline_sharp)),
-                  ),
-                ]),
+                ),
               ),
             ),
             const SizedBox(height: 20),

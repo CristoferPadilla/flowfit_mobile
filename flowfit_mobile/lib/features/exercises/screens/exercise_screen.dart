@@ -1,6 +1,4 @@
-import 'package:flowfit_mobile/features/exercises/screens/body_part_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/create_routine_screen.dart';
-import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/start_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/routine_option_container.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
@@ -58,7 +56,7 @@ class ExercisesScreen extends StatelessWidget {
                 icon:Icons.add_circle_outline_sharp,
                 title: 'Mis rutinas',
                 description: 'Crea tu propia rutina de ejercicios',
-                screen: CreateRoutineScreen(),
+                screen: CreateRoutineScreen(isNewRoutine: true,),
               ),
               //             Padding(
               //   padding: EdgeInsets.all(8.0),
@@ -114,7 +112,7 @@ class ExercisesScreen extends StatelessWidget {
                 icon: Icons.play_circle_outline,
                 title: 'Empezar rutina',
                 description: '',
-                screen: StartRoutineScreen(),
+                screen: CreateRoutineScreen(isNewRoutine: false,),
               ),
             ],
           ),

@@ -1,10 +1,12 @@
 import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
+import 'package:flowfit_mobile/features/exercises/screens/start_routine_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 
 class CreateRoutineScreen extends StatelessWidget {
-  const CreateRoutineScreen({Key? key}) : super(key: key);
+  final bool isNewRoutine;
+  const CreateRoutineScreen({Key? key, required this.isNewRoutine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +23,36 @@ class CreateRoutineScreen extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Expanded(
+             Expanded(
               //todo AQUI PONDRÉ LAS RUTINAS QUE SE CREEN
-              child: const Column(
+              child:  Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Sin rutinas'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: (){
+                      Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const StartRoutineScreen())
+            );
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 100,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadiusDirectional.circular(20)
+                        ),
+                        child: const Text('Nombre de la rutina', style: TextStyle(color: Colors.white)),
+                       ),
+                    ),
+                  )
                 ],
               ), 
             ),
+            if(isNewRoutine == true)
             SizedBox(
               height: 50,
               width: double.infinity,
