@@ -1,5 +1,6 @@
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionExerciseScreen extends StatelessWidget {
@@ -18,7 +19,7 @@ class DescriptionExerciseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? formattedInstructions = instructions?.replaceAll(',','\n');
+    String? formattedInstructions = instructions?.replaceAll(',', '\n');
 
     return SafeArea(
       child: Scaffold(
@@ -38,16 +39,29 @@ class DescriptionExerciseScreen extends StatelessWidget {
               child: SizedBox(
                 height: 250,
                 width: double.infinity,
-                child: Placeholder(
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      gifUrl,
+                child: Stack(alignment: Alignment.bottomRight, children: [
+                  Placeholder(
+                    child: Image(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        gifUrl,
+                      ),
+                      width: double.infinity,
+                      height: 250,
                     ),
-                    width: double.infinity,
-                    height: 250,
                   ),
-                ),
+                  Padding( 
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconButton.filled(
+                      iconSize: 30,
+                        style: const ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                PrimaryTheme.secundaryColor)),
+                        color: Colors.white,
+                        onPressed: () {},
+                        icon: const Icon(Icons.add_circle_outline_sharp)),
+                  ),
+                ]),
               ),
             ),
             const SizedBox(height: 20),
@@ -110,7 +124,6 @@ class DescriptionExerciseScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const Spacer(),
             SectionButtons(
               isBackButtonVisible: true,
               isFrontButtonVisible: false,

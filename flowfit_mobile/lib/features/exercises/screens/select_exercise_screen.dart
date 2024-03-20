@@ -11,7 +11,7 @@ class SelectExercisesScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
         backgroundColor: Colors.grey.shade100,
-          title: const Text('¡Encuentra el mejor ejercicio para ti!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
+          title: const Text('¡Es hora de tener buena técnica!', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
         ),
         backgroundColor: Colors.grey.shade100,
         body: const SingleChildScrollView(

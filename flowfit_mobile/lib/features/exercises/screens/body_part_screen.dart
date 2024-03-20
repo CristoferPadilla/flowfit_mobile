@@ -13,8 +13,8 @@ class BodyPartScreen extends StatelessWidget {
         appBar: const PreferredSize(
                     preferredSize: Size.fromHeight(90),
           child: CustomeAppbar(
-            title: 'Partes del cuerpo',
-            subtitle: '¡Encuentra el mejor ejercicio para ti!',
+            title: 'Rutinas de ejercicios',
+            subtitle: 'Selecciona que parte de tu cuerpo quieres ejercitar',
             
           ),
         ),

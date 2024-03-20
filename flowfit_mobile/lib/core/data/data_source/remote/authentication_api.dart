@@ -10,44 +10,42 @@ class AuthenticationAPI {
 
   AuthenticationAPI(this._http);
 
-  Future<LoginResponse> login(String username, String password) async {
-    try {
-      final result = await _http.request(
-        '/members/login',
-        body: {'username': username, 'password': password},
-        method: HttpMethod.post,
-        timeOut: const Duration(seconds: 10),
-      );
+Future<LoginResponse> login(String username, String password) async {
+  try {
+    final result = await _http.request(
+      '/members/login',
+      body: {'username': username, 'password': password},
+      method: HttpMethod.post,
+      timeOut: const Duration(seconds: 10),
+    );
 
-      if (result.statusCode == 200) {
-        final accessToken = result.data['accessToken'];
-        final id = result.data['member']['id'];
-        final profilePicture = result.data['member']['profile_picture'];
+    if (result.statusCode == 200) {
+      final accessToken = result.data['accessToken'];
+      final id = result.data['member']['id'];
+      final profilePicture = result.data['member']['profile_picture'];
 
-        // final id = result.data['id'];
-        if (accessToken != null) {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('username', username);
-          await prefs.setString('accessToken', accessToken);
-          await prefs.setString('id', id.toString());
-          await prefs.setString('picture_profile', profilePicture);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('username', username);
+      await prefs.setString('accessToken', accessToken);
+      await prefs.setString('id', id.toString());
+      await prefs.setString('picture_profile', profilePicture);
 
+      print('AccessToken: $accessToken');
+      print('ID del usuario: $id');
+      print('Usuario es: $username');
+      print('La foto es: $profilePicture');
 
-          print('AccessToken: $accessToken');
-          print('ID del usuario: $id');
-          print('Usuario es: $username');
-          print('La foto es: $profilePicture');
-        } else {
-          print('Error: AccessToken no encontrado en la respuesta.');
-        }
-        print(result.data);
-
-        return LoginResponse.ok;
-      } else {
-        return LoginResponse.networkError;
-      }
-    } catch (error) {
-      return LoginResponse.networkError;
+      return LoginResponse.ok;
+    } else if (result.statusCode == 401) {
+      return LoginResponse.accesDenied;
+    } else {
+      // Otro tipo de error
+      return LoginResponse.accesDenied;
     }
+  } catch (error) {
+    // Error de red
+    return LoginResponse.networkError;
   }
+}
+
 }

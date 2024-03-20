@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +29,8 @@ class _ContainerInfoState extends State<ContainerInfo> {
 Future<void> _getUserData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
-  String url = 'https://api-zydf.onrender.com/members';
+  String? id = prefs.getString('id');
+  String url = 'https://api-zydf.onrender.com/members'; 
 
   try {
     final response = await http.get(
@@ -40,14 +43,19 @@ Future<void> _getUserData() async {
     if (response.statusCode == 200) {
       List<dynamic> responseData = jsonDecode(response.body);
       if (responseData.isNotEmpty) {
-        Map<String, dynamic> userData = responseData[0]; // Obtener el primer elemento de la lista
-        setState(() {
-          _username = userData['username'] ?? '';
-          _email = userData['email'] ?? '';
-          _assigned_membership = userData['assigned_membership'].toString() ?? '';
-          _phone = userData['phone'] ?? '';
-          _isLoading = false;
-        });
+        for (var userData in responseData) {
+          if (userData['id'].toString() == id) {
+            setState(() {
+              _username = userData['username'] ?? '';
+              _email = userData['email'] ?? '';
+              _assigned_membership = userData['assigned_membership'].toString();
+              _phone = userData['phone'] ?? '';
+              _isLoading = false;
+            });
+            return; 
+          }
+        }
+        print('No se encontró ningún usuario con el ID proporcionado');
       } else {
         print('No se encontraron datos de usuario');
       }
@@ -58,6 +66,7 @@ Future<void> _getUserData() async {
     print('Error de conexión: $e');
   }
 }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
