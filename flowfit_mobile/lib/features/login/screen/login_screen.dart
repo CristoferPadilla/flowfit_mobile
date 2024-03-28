@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flowfit_mobile/core/domain/responses/login_response.dart';
+import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/core/data/data_source/remote/authentication_api.dart';
 import 'package:flowfit_mobile/core/data/helpers/http.dart';
@@ -38,41 +39,49 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _login() async {
-    final http = Http(baseUrl: 'https://api-zydf.onrender.com');
-    final AuthenticationRepository auth =
-        AuthenticationRepositoryImplementation(
-      AuthenticationAPI(http),
-    );
+void _login() async {
+  final http = Http(baseUrl: 'https://api-zydf.onrender.com');
+  final AuthenticationRepository auth =
+      AuthenticationRepositoryImplementation(
+    AuthenticationAPI(http),
+  );
+final username = _usernameController.text;
+  final password = _passwordController.text;
 
-    final username = _usernameController.text;
-    final password = _passwordController.text;
+  auth.login(username, password).then((loginResponse) async {
+    switch (loginResponse) {
+      case LoginResponse.ok:
+        print('Autenticación exitosa');
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true); // Marcar al usuario como iniciado sesión
+        final accessToken = prefs.getString('accessToken') ?? '';
+        final picture_profile = prefs.getString('picture_profile') ?? '';
+        print('AccessToken: $accessToken');
+        final id = prefs.getString('id') ?? '';
+        print('Id member: $id');
+        print('Usuario es: $username');
+        print('La foto  es: $picture_profile');
 
-    auth.login(username, password).then((loginResponse) async {
-  switch (loginResponse) {
-    case LoginResponse.ok:
-      print('Autenticación exitosa');
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('username', username);
-      final accessToken = prefs.getString('accessToken') ?? '';
-      final picture_profile = prefs.getString('picture_profile') ?? '';
-      print('AccessToken: $accessToken');
-      final id = prefs.getString('id') ?? '';
-      print('Id member: $id');
-                print('Usuario es: $username');
-                print('La foto  es: $picture_profile');
-
-
-      Navigator.push(
-        context,
-        PageTransition(
-          type: PageTransitionType.fade,
-          child: const FirstStepsScreen(),
-          inheritTheme: true,
-          ctx: context,
-        ),
-      );
-      break;
+        // Verificar si es la primera vez que el usuario inicia sesión
+        final bool isFirstLogin = prefs.getBool('isFirstLogin') ?? true;
+        if (isFirstLogin) {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              child: const FirstStepsScreen(),
+              inheritTheme: true,
+              ctx: context,
+            ),
+          );
+          await prefs.setBool('isFirstLogin', false);
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const NavBar()),
+          );
+        }
+        break;
         case LoginResponse.accesDenied:
           print('Credenciales inválidas');
           showDialog(

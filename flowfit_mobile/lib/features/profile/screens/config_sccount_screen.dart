@@ -1,3 +1,4 @@
+import 'package:flowfit_mobile/features/profile/screens/edit_info_screen.dart';
 import 'package:flowfit_mobile/features/profile/widget/container/container_info.dart';
 import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
@@ -17,7 +18,12 @@ class _ConfigAccountScreenState extends State<ConfigAccountScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: PrimaryTheme.secundaryColor,
-          onPressed: () {},
+          onPressed: () {
+                                  Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const EditUserInfoScreen())
+            );
+          },
           label: const Icon(Icons.edit, color: Colors.white),
         ),
         appBar: AppBar(

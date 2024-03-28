@@ -1,20 +1,77 @@
-import 'package:flowfit_mobile/features/analytics/widgets/calendary/calendary_screen.dart';
-import 'package:flowfit_mobile/features/analytics/widgets/card/custome_container_card.dart';
-import 'package:flowfit_mobile/resources/themes/font_styles.dart';
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
+import 'dart:convert';
+import 'package:flowfit_mobile/features/analytics/widgets/column/custome_column.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flowfit_mobile/resources/themes/font_styles.dart';
+import 'package:flowfit_mobile/features/analytics/widgets/card/custome_container_card.dart';
+import 'package:flowfit_mobile/features/analytics/widgets/calendary/calendary_screen.dart';
 
-class AnalyticsScreen extends StatelessWidget {
-  const AnalyticsScreen({super.key});
+class AnalyticsScreen extends StatefulWidget {
+  const AnalyticsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AnalyticsScreen> createState() => _AnalyticsScreenState();
+}
+
+class _AnalyticsScreenState extends State<AnalyticsScreen> {
+  late double _height = 0.0;
+  late double _weight = 0.0;
+  late double _bmi = 0.0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+Future<void> _fetchData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  String? id = prefs.getString('id');
+  try {
+    final response = await http.get(
+      Uri.parse('https://api-zydf.onrender.com/members'),
+      headers: <String, String>{
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+      if (responseData.isNotEmpty) {
+        for (var userData in responseData) {
+          if (userData['id'].toString() == id) {
+            setState(() {
+              _height = double.parse(userData['height'].toString());
+              _weight = double.parse(userData['weight'].toString());
+              _bmi = double.parse(userData['body_fat_percentage'].toString());
+              _isLoading = false;
+            });
+            break; 
+          }
+        }
+      }
+    } else {
+      print('Error: ${response.reasonPhrase}');
+    }
+  } catch (e) {
+    print('Error de conexión: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.grey.shade100,
-            body: SingleChildScrollView(
-              child: Center(
-                child: Column(
+    return _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : SafeArea(
+            child: Scaffold(
+              backgroundColor: Colors.grey.shade100,
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
@@ -29,7 +86,7 @@ class AnalyticsScreen extends StatelessWidget {
                         ),
                       ),
                       const CustomContainerCard(
-                        height:0.18,
+                        height: 0.18,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -57,14 +114,14 @@ class AnalyticsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      CustomContainerCard(
+                      const CustomContainerCard(
                         height: 0.18,
                         child: Column(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: CalendarDays(),
                             ),
-                            const Divider(
+                            Divider(
                               color: Colors.grey,
                               thickness: 0.1,
                             ),
@@ -73,13 +130,11 @@ class AnalyticsScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   '1 ',
-                                  style: FontStyle.titleTextStyle
-                                      .copyWith(fontSize: 20),
+                                  style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
                                   'Día en racha',
-                                  style: FontStyle.cardTextStyle
-                                      .copyWith(fontSize: 15),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                               ],
                             )
@@ -97,23 +152,24 @@ class AnalyticsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const CustomContainerCard(
+                      CustomContainerCard(
                         height: 0.10,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        'Estatura: 160 cm', 
-                        style: TextStyle(fontSize: 18),
+                          children: [
+                            Text(
+                              'Estatura: $_height cm',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Peso: $_weight kg',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Peso: 70 kg', 
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),)     ,   
-                  Padding(
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Índice de masa corporal',
@@ -124,54 +180,20 @@ class AnalyticsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                  const CustomContainerCard(
-                    height:  0.10,
-                    child: Center(
-                      child: Text(
-                        'IMC: 24.22', 
-                        style: TextStyle(fontSize: 18),
+                      CustomContainerCard(
+                        height: 0.10,
+                        child: Center(
+                          child: Text(
+                            'IMC: $_bmi',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ),
                       ),
-                    ),)    
-                    ]
-                    ),
+                    ],
+                  ),
+                ),
               ),
-            )));
-  }
-}
-
-class ColumnData extends StatelessWidget {
-  final String title;
-  final IconData? icon;
-  final String number;
-  const ColumnData({
-    super.key,
-    required this.title,
-    required this.number,
-    this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Icon(
-          icon,
-          size: 45,
-          color: PrimaryTheme.secundaryColor,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            number,
-            style: FontStyle.titleTextStyle.copyWith(fontSize: 25),
-          ),
-        ),
-        Text(
-          title,
-          style: FontStyle.cardTextStyle.copyWith(fontSize: 15),
-        ),
-      ]),
-    );
+            ),
+          );
   }
 }

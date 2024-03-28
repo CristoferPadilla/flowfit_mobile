@@ -16,7 +16,7 @@ class ContainerInfo extends StatefulWidget {
 class _ContainerInfoState extends State<ContainerInfo> {
   late String _username = '';
   late String _email = '';
-  late String _assigned_membership = '';
+  // late String _assigned_membership = '';
   late String _phone = '';
   bool _isLoading = true;
 
@@ -48,7 +48,7 @@ Future<void> _getUserData() async {
             setState(() {
               _username = userData['username'] ?? '';
               _email = userData['email'] ?? '';
-              _assigned_membership = userData['assigned_membership'].toString();
+              // _assigned_membership = userData['assigned_membership'].toString();
               _phone = userData['phone'] ?? '';
               _isLoading = false;
             });
@@ -85,8 +85,8 @@ Future<void> _getUserData() async {
                   const Divider(),
                   CustomFielDataNoScreen(title: 'Email: ', name: _email),
                   const Divider(),
-                  CustomFielDataNoScreen(title: 'Membresia: ', name: _assigned_membership),
-                  const Divider(),
+                  // CustomFielDataNoScreen(title: 'Membresia: ', name: _assigned_membership),
+                  // const Divider(),
                   CustomFielDataNoScreen(title: 'Celular: ', name: _phone),
                 ],
               ),

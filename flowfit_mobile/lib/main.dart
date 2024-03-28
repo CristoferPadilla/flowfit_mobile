@@ -2,7 +2,6 @@ import 'package:flowfit_mobile/features/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-
 void main() {
   
  WidgetsFlutterBinding.ensureInitialized();
