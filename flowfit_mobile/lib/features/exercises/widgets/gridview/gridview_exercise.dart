@@ -55,7 +55,7 @@ class _GridViewContainerState extends State<GridViewContainer> {
         final List<dynamic> responseData = json.decode(response.body);
         setState(() {
           exercises = responseData.map((json) => Exercise.fromJson(json)).toList();
-          filteredExercises = List.from(exercises); // Actualizar filteredExercises con la lista completa de ejercicios
+          filteredExercises = List.from(exercises);
           _isLoading = false;
         });
       } else {
@@ -69,12 +69,27 @@ class _GridViewContainerState extends State<GridViewContainer> {
     }
   }
 
-  void _filterExercises(String searchTerm) {
-    setState(() {
-      filteredExercises = exercises.where((exercise) {
-        return exercise.name.toLowerCase().contains(searchTerm.toLowerCase());
-      }).toList();
-    });
+  void _filterExercises(String searchTerm) async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://exercisedb.p.rapidapi.com/exercises/name/$searchTerm'),
+        headers: {
+          'X-RapidAPI-Key': '4605281141msh0e98e818c927662p1348bfjsn25e19f56beb8',
+          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+        setState(() {
+          filteredExercises = responseData.map((json) => Exercise.fromJson(json)).toList();
+        });
+      } else {
+        throw Exception('Failed to load exercises');
+      }
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
@@ -84,16 +99,23 @@ class _GridViewContainerState extends State<GridViewContainer> {
         Padding(
           padding: const EdgeInsets.all(15.0),
           child: TextField(
+            cursorColor:PrimaryTheme.secundaryColor ,
             controller: searchController,
             onChanged: _filterExercises,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
+              hoverColor: PrimaryTheme.secundaryColor,
               hintText: 'Buscar ejercicio',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.search),
+              border: const OutlineInputBorder(
+                borderSide: BorderSide(color: PrimaryTheme.secundaryColor)
+              ),
+              focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: PrimaryTheme.secundaryColor), 
+      borderRadius: BorderRadius.circular(20))
             ),
           ),
         ),
-        if (!_isLoading)
+        if (!_isLoading && filteredExercises.isNotEmpty)
           Expanded(
             child: ListView.builder(
               itemCount: filteredExercises.length,

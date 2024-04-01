@@ -45,7 +45,7 @@ class _ContainerExerciceState extends State<ContainerExercice> {
           alignment: Alignment.bottomRight,
           children: [
             Container(
-              width: double.infinity,
+              width: double.maxFinite,
               height: 200,
               decoration: BoxDecoration(
                 color: Colors.white,
