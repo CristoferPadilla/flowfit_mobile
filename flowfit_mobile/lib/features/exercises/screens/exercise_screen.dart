@@ -1,5 +1,4 @@
 import 'package:flowfit_mobile/features/exercises/screens/create_routine_screen.dart';
-import 'package:flowfit_mobile/features/exercises/screens/start_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/routine_option_container.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile.dart';

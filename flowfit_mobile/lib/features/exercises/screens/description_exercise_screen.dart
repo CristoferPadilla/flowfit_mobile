@@ -1,6 +1,5 @@
 import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionExerciseScreen extends StatelessWidget {
