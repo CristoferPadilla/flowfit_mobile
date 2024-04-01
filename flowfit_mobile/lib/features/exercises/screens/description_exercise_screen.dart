@@ -30,95 +30,97 @@ class DescriptionExerciseScreen extends StatelessWidget {
             subtitle: '¡Repasa y aprende con técnica!',
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                height: 250,
-                width: double.infinity,
-                child: Placeholder(
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      gifUrl,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: SizedBox(
+                  height: 250,
+                  width: double.infinity,
+                  child: Placeholder(
+                    child: Image(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        gifUrl,
+                      ),
+                      width: double.infinity,
+                      height: 250,
                     ),
-                    width: double.infinity,
-                    height: 250,
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                children: [
-                  const Text(
-                    'Nombre del ejercicio:  ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Nombre del ejercicio:  ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                children: [
-                  const Text(
-                    'Área que se entrena:  ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Área que se entrena:  ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    bodyPart ?? 'No disponible',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      bodyPart ?? 'No disponible',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  const Text(
-                    'Instrucciones',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Instrucciones',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  Text(formattedInstructions ?? "No disponible"),
-                ],
+                    Text(formattedInstructions ?? "No disponible"),
+                  ],
+                ),
               ),
-            ),
-            SectionButtons(
-              isBackButtonVisible: true,
-              isFrontButtonVisible: false,
-              screen: DescriptionExerciseScreen(
-                name: name,
-                gifUrl: gifUrl,
-              ),
-            )
-          ],
+              SectionButtons(
+                isBackButtonVisible: true,
+                isFrontButtonVisible: false,
+                screen: DescriptionExerciseScreen(
+                  name: name,
+                  gifUrl: gifUrl,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
