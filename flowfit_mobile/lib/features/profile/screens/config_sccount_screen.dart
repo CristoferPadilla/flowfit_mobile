@@ -31,7 +31,7 @@ class _ConfigAccountScreenState extends State<ConfigAccountScreen> {
         ),
         body: Column(
           children: [
-            IconProfileStack(isEdit: false),
+            const IconProfileStack(isEdit: false),
             ContainerInfo(),
           ],
         ),

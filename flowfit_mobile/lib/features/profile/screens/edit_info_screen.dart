@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditUserInfoScreen extends StatefulWidget {
@@ -17,7 +20,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _passwordController;
-  late String _imagePath;
+  String? _profilePicturePath;
   bool _isLoading = true;
   bool _isPasswordVisible = false;
 
@@ -28,7 +31,6 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _passwordController = TextEditingController();
-    _imagePath = '';
     _getUserData();
   }
 
@@ -55,7 +57,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 _passwordController.text = userData['password'];
                 _emailController.text = userData['email'];
                 _phoneController.text = userData['phone'];
-                _imagePath = userData['profileImage'] ;
+                _profilePicturePath = userData['profile_picture'];
                 _isLoading = false;
               });
               return;
@@ -66,27 +68,17 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
           print('La respuesta del servidor no contiene datos válidos');
         }
       } else {
-        print('Error al obtener los datos del usuario: ${response.statusCode}');
+        print(
+            'Error al obtener los datos del usuario: ${response.statusCode}');
       }
-  } catch (e) {
-    print('Error de conexión: $e');
-    setState(() {
-      _isLoading = false; // Manejar el error estableciendo isLoading como false
-    });
-  }
-  }
-
-  Future<void> _pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (pickedImage != null) {
+    } catch (e) {
+      print('Error de conexión: $e');
       setState(() {
-        _imagePath = pickedImage.path;
+        _isLoading = false;
       });
     }
   }
+
 
   @override
   void dispose() {
@@ -105,62 +97,112 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                IconProfileStack(isEdit: true),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        isPasswordVisible: false,
-                        togglePasswordVisibility: () {},
-                        controller: _usernameController,
-                        label: 'Usuario',
-                      ),
-                      CustomTextField(
-                        controller: _emailController,
-                        label: 'Correo Electrónico',
-                        isPasswordVisible: false,
-                        togglePasswordVisibility: () {},
-                      ),
-                      CustomTextField(
-                        isPasswordVisible: false,
-                        togglePasswordVisibility: () {},
-                        controller: _phoneController,
-                        label: 'Número de Teléfono',
-                      ),
-                      CustomTextField(
-                        controller: _passwordController,
-                        label: 'Contraseña',
-                        isPassword: true,
-                        isPasswordVisible: _isPasswordVisible,
-                        togglePasswordVisibility: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _saveChanges();
-                        },
-                        child: const Text('Guardar Cambios'),
-                      ),
-                    ],
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  IconProfileStack(
+                    isEdit: true,
+                    onImageSelected: (imagePath) {
+                      setState(() {
+                        _profilePicturePath = imagePath; // Actualiza la ruta de la imagen en EditUserInfoScreen
+                      });
+                    },
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          isPasswordVisible: false,
+                          togglePasswordVisibility: () {},
+                          controller: _usernameController,
+                          label: 'Usuario',
+                        ),
+                        CustomTextField(
+                          controller: _emailController,
+                          label: 'Correo Electrónico',
+                          isPasswordVisible: false,
+                          togglePasswordVisibility: () {},
+                        ),
+                        CustomTextField(
+                          isPasswordVisible: false,
+                          togglePasswordVisibility: () {},
+                          controller: _phoneController,
+                          label: 'Número de Teléfono',
+                        ),
+                        CustomTextField(
+                          controller: _passwordController,
+                          label: 'Contraseña',
+                          isPassword: true,
+                          isPasswordVisible: _isPasswordVisible,
+                          togglePasswordVisibility: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _saveChanges();
+                          },
+                          child: const Text('Guardar Cambios'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }
 
-  Future<void> _saveChanges() async {
-    final newUsername = _usernameController.text;
-    final newEmail = _emailController.text;
-    final newPhone = _phoneController.text;
-    final newPassword = _passwordController.text;
+Future<void> _saveChanges() async {
+  final newUsername = _usernameController.text;
+  final newEmail = _emailController.text;
+  final newPhone = _phoneController.text;
+  final newPassword = _passwordController.text;
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  String? id = prefs.getString('id');
+  String url = 'https://api-zydf.onrender.com/members/$id';
+
+  try {
+    Map<String, dynamic> requestData = {
+      'username': newUsername,
+      'email': newEmail,
+      'phone': newPhone,
+      'password': newPassword,
+    };
+
+    // Si hay una nueva imagen de perfil seleccionada, añádela a los datos de la solicitud
+    if (_profilePicturePath != null && _profilePicturePath!.isNotEmpty) {
+      requestData['profile_picture'] = base64Encode(File(_profilePicturePath!).readAsBytesSync());
+    }
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(requestData),
+    );
+
+    if (response.statusCode == 200) {
+      print('Cambios guardados exitosamente.');
+      Navigator.pop(context);
+      // Puedes hacer algo después de guardar los cambios, como navegar a otra pantalla
+    } else {
+      print('Error al guardar los cambios: ${response.statusCode}');
+      // Manejar el error apropiadamente, como mostrar un mensaje al usuario
+    }
+  } catch (e) {
+    print('Error de conexión: $e');
+    // Manejar el error de conexión, como mostrar un mensaje al usuario
   }
+}
+
 }
 
 class CustomTextField extends StatelessWidget {

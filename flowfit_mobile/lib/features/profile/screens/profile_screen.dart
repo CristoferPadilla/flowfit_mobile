@@ -64,11 +64,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         body: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const IconProfileStack(isEdit: false,),
+                  const IconProfileStack(isEdit: false ,),
                   Center(
                     child: Text(
                       username.isNotEmpty ? username : 'Loading...',
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 20),
                   if (username.isNotEmpty)
-                    CustomFielData(
+                    const CustomFielData(
                       title: 'Configuración de la cuenta ',
                       name: '',
                       screen: ConfigAccountScreen(),

@@ -7,10 +7,12 @@ import 'package:image_picker/image_picker.dart';
 
 class IconProfileStack extends StatefulWidget {
   final bool isEdit;
+  final Function(String?)? onImageSelected;
 
   const IconProfileStack({
     Key? key,
     required this.isEdit,
+     this.onImageSelected,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class _IconProfileStackState extends State<IconProfileStack> {
       if (pickedFile != null) {
         setState(() {
           _imagePath = pickedFile.path;
+          widget.onImageSelected!(_imagePath); // Llama a la función de devolución de llamada con la ruta de la imagen seleccionada
         });
       }
     } catch (e) {
@@ -47,7 +50,7 @@ class _IconProfileStackState extends State<IconProfileStack> {
             child: Container(
               width: 150,
               height: 150,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 128, 128, 128),
                 border: Border.fromBorderSide(
                   BorderSide(
@@ -85,12 +88,12 @@ class _IconProfileStackState extends State<IconProfileStack> {
               child: Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: PrimaryTheme.secundaryColor,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.camera_alt_rounded,
+                child: const Icon(
+                  Icons.edit,
                   color: Colors.white,
                   size: 30,
                 ),
