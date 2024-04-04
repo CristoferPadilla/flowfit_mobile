@@ -1,9 +1,11 @@
-
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 
 class IconProfileStack extends StatefulWidget {
   final bool isEdit;
@@ -12,7 +14,7 @@ class IconProfileStack extends StatefulWidget {
   const IconProfileStack({
     Key? key,
     required this.isEdit,
-     this.onImageSelected,
+    this.onImageSelected,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,23 @@ class IconProfileStack extends StatefulWidget {
 }
 
 class _IconProfileStackState extends State<IconProfileStack> {
-  String? _imagePath;
+  String? _imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final imageUrl = prefs.getString('picture_profile_url');
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      setState(() {
+        _imageUrl = imageUrl;
+      });
+    }
+  }
 
   Future<void> _pickImage() async {
     try {
@@ -30,13 +48,19 @@ class _IconProfileStackState extends State<IconProfileStack> {
 
       if (pickedFile != null) {
         setState(() {
-          _imagePath = pickedFile.path;
-          widget.onImageSelected!(_imagePath); // Llama a la función de devolución de llamada con la ruta de la imagen seleccionada
+          _imageUrl = pickedFile.path;
+          widget.onImageSelected!(_imageUrl);
+          saveImageData(_imageUrl!);
         });
       }
     } catch (e) {
       print('Error al seleccionar la imagen: $e');
     }
+  }
+
+  Future<void> saveImageData(String imageUrl) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('picture_profile_url', imageUrl);
   }
 
   @override
@@ -50,7 +74,7 @@ class _IconProfileStackState extends State<IconProfileStack> {
             child: Container(
               width: 150,
               height: 150,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Color.fromARGB(255, 128, 128, 128),
                 border: Border.fromBorderSide(
                   BorderSide(
@@ -61,18 +85,15 @@ class _IconProfileStackState extends State<IconProfileStack> {
                 shape: BoxShape.circle,
               ),
               child: ClipOval(
-                child: _imagePath != null
+                child: _imageUrl != null
                     ? Image.file(
-                        File(_imagePath!),
+                        File(_imageUrl!),
                         fit: BoxFit.cover,
                         width: 150,
                         height: 150,
                       )
-                    : Image.asset(
-                        'assets/profile_example.jpg',
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 150,
+                    : Container(
+                        color: Colors.red,
                       ),
               ),
             ),
@@ -88,11 +109,11 @@ class _IconProfileStackState extends State<IconProfileStack> {
               child: Container(
                 width: 50,
                 height: 50,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: PrimaryTheme.secundaryColor,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.edit,
                   color: Colors.white,
                   size: 30,

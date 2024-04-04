@@ -1,18 +1,20 @@
 // ignore_for_file: avoid_print
 
-import 'package:flowfit_mobile/core/domain/responses/login_response.dart';
-import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flowfit_mobile/features/first-steps/screens/first_steps.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:flowfit_mobile/core/domain/responses/login_response.dart';
 import 'package:flowfit_mobile/core/data/data_source/remote/authentication_api.dart';
 import 'package:flowfit_mobile/core/data/helpers/http.dart';
 import 'package:flowfit_mobile/core/data/repositories_impl/repositories_implementatio.dart';
 import 'package:flowfit_mobile/core/domain/repositories/authentication_repository.dart';
-import 'package:flowfit_mobile/features/first-steps/screens/first_steps.dart';
 import 'package:flowfit_mobile/features/login/widget/text/title_text.dart';
 import 'package:flowfit_mobile/features/login/widget/textfield/custome_textfield.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -30,42 +32,23 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
+    _checkLoggedIn();
   }
 
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  void _checkLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final isFirstLogin = prefs.getBool('isFirstLogin') ?? true;
+    final lastLoginTime = prefs.getInt('lastLoginTime') ?? 0;
 
-void _login() async {
-  final http = Http(baseUrl: 'https://api-zydf.onrender.com');
-  final AuthenticationRepository auth =
-      AuthenticationRepositoryImplementation(
-    AuthenticationAPI(http),
-  );
-final username = _usernameController.text;
-  final password = _passwordController.text;
-
-  auth.login(username, password).then((loginResponse) async {
-    switch (loginResponse) {
-      case LoginResponse.ok:
-        print('Autenticación exitosa');
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isLoggedIn', true); // Marcar al usuario como iniciado sesión
-        final accessToken = prefs.getString('accessToken') ?? '';
-        final picture_profile = prefs.getString('picture_profile') ?? '';
-        print('AccessToken: $accessToken');
-        final id = prefs.getString('id') ?? '';
-        print('Id member: $id');
-        print('Usuario es: $username');
-        print('La foto  es: $picture_profile');
-
-        // Verificar si es la primera vez que el usuario inicia sesión
-        final bool isFirstLogin = prefs.getBool('isFirstLogin') ?? true;
+    if (isLoggedIn) {
+      final currentTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      final oneHour = Duration(hours: 1).inSeconds;
+      if (currentTime - lastLoginTime >= oneHour) {
+        _logout();
+      } else {
         if (isFirstLogin) {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             PageTransition(
               type: PageTransitionType.fade,
@@ -74,79 +57,106 @@ final username = _usernameController.text;
               ctx: context,
             ),
           );
-          await prefs.setBool('isFirstLogin', false);
         } else {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const NavBar()),
           );
         }
-        break;
+      }
+    }
+  }
+
+  void _login() async {
+    final http = Http(baseUrl: 'https://api-zydf.onrender.com');
+    final AuthenticationRepository auth =
+        AuthenticationRepositoryImplementation(
+      AuthenticationAPI(http),
+    );
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
+    auth.login(username, password).then((loginResponse) async {
+      switch (loginResponse) {
+        case LoginResponse.ok:
+          print('Autenticación exitosa');
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true); // Marcar al usuario como iniciado sesión
+          await prefs.setInt('lastLoginTime', DateTime.now().millisecondsSinceEpoch ~/ 1000); // Marcar la hora del inicio de sesión
+          final accessToken = prefs.getString('accessToken') ?? '';
+          final picture_profile = prefs.getString('picture_profile') ?? '';
+          print('AccessToken: $accessToken');
+          final id = prefs.getString('id') ?? '';
+          print('Id member: $id');
+          print('Usuario es: $username');
+          print('La foto  es: $picture_profile');
+
+          // Verificar si es la primera vez que el usuario inicia sesión
+          final bool isFirstLogin = prefs.getBool('isFirstLogin') ?? true;
+          if (isFirstLogin) {
+            Navigator.pushReplacement(
+              context,
+              PageTransition(
+                type: PageTransitionType.fade,
+                child: const FirstStepsScreen(),
+                inheritTheme: true,
+                ctx: context,
+              ),
+            );
+            await prefs.setBool('isFirstLogin', false);
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const NavBar()),
+            );
+          }
+          break;
         case LoginResponse.accesDenied:
           print('Credenciales inválidas');
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Error'),
-                content: const Text(
-                    'Credenciales inválidas. Por favor, inténtelo de nuevo.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          _showErrorDialog('Credenciales inválidas. Por favor, inténtelo de nuevo.');
           break;
         case LoginResponse.networkError:
           print('Error de red durante el inicio de sesión');
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Error'),
-                content: const Text(
-                    'Hubo un error de red durante el inicio de sesión. Por favor, inténtelo de nuevo.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          _showErrorDialog('Hubo un error de red durante el inicio de sesión. Por favor, inténtelo de nuevo.');
           break;
         case LoginResponse.unknownError:
           print('Error desconocido durante el inicio de sesión');
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Error'),
-                content: const Text(
-                    'Hubo un error desconocido durante el inicio de sesión. Por favor, inténtelo de nuevo.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          _showErrorDialog('Hubo un error desconocido durante el inicio de sesión. Por favor, inténtelo de nuevo.');
           break;
       }
     });
+  }
+
+  void _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+    await prefs.remove('lastLoginTime');
+
+    // Redirigir al inicio de sesión
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -247,7 +257,8 @@ final username = _usernameController.text;
                               child: const Text(
                                 'Iniciar sesión',
                                 style: TextStyle(
-                                    color: PrimaryTheme.backgroundColor),
+                                  color: PrimaryTheme.backgroundColor,
+                                ),
                               ),
                             ),
                           ),
