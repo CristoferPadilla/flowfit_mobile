@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flowfit_mobile/features/exercises/screens/description_exercise_screen.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
+import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
 
-class ContainerExercice extends StatefulWidget {
+class ContainerExercice extends StatelessWidget {
   final String name;
   final String gifUrl;
   final String? bodyPart;
   final String? instructions;
+  final bool isSelected;
+  final VoidCallback onTap; // Agregar el callback onTap
 
   const ContainerExercice({
     Key? key,
@@ -14,33 +16,16 @@ class ContainerExercice extends StatefulWidget {
     required this.gifUrl,
     this.bodyPart,
     this.instructions,
+    required this.isSelected,
+    required this.onTap, // Agregar onTap como argumento del constructor
   }) : super(key: key);
-
-  @override
-  _ContainerExerciceState createState() => _ContainerExerciceState();
-}
-
-class _ContainerExerciceState extends State<ContainerExercice> {
-  bool isSelected = false;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DescriptionExerciseScreen(
-                name: widget.name,
-                gifUrl: widget.gifUrl,
-                instructions: widget.instructions,
-                bodyPart: widget.bodyPart,
-              ),
-            ),
-          );
-        },
+        onTap: onTap, // Llamar onTap cuando se toque el widget
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
@@ -50,8 +35,9 @@ class _ContainerExerciceState extends State<ContainerExercice> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                              image:  DecorationImage(
-                image: NetworkImage(widget.gifUrl), ),
+                image: DecorationImage(
+                  image: NetworkImage(gifUrl),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
@@ -66,7 +52,7 @@ class _ContainerExerciceState extends State<ContainerExercice> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      widget.name,
+                      name,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -77,31 +63,24 @@ class _ContainerExerciceState extends State<ContainerExercice> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isSelected = !isSelected;
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: isSelected ? PrimaryTheme.secundaryColor : Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color: PrimaryTheme.secundaryColor,
-                    width: 2,
-                  ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: isSelected ? PrimaryTheme.secundaryColor : Colors.transparent,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: PrimaryTheme.secundaryColor,
+                  width: 2,
                 ),
-                child: isSelected
-                    ? Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      )
-                    : null,
               ),
+              child: isSelected
+                  ? Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    )
+                  : null,
             ),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'package:flowfit_mobile/features/exercises/screens/create_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,10 +18,10 @@ class ContainerExerciseBodyParts extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: GestureDetector(
           onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SelectExercisesScreen()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) =>  SelectExercisesScreen()),
+            // );
           
           },
           child: Container(

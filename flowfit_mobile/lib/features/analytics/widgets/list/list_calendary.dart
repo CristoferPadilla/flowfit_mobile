@@ -1,4 +1,6 @@
 import 'package:flowfit_mobile/features/exercises/screens/body_part_screen.dart';
+import 'package:flowfit_mobile/features/exercises/screens/create_routine_screen.dart';
+import 'package:flowfit_mobile/features/exercises/screens/save_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/select_exercise_screen.dart';
 import 'package:flowfit_mobile/features/analytics/widgets/calendary/calendary_container.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
@@ -85,7 +87,7 @@ class ListCalendary extends StatelessWidget {
                   Text('Asigna una rutina para hoy', style: FontStyle.descriptionTextStyle.copyWith(color: Colors.black)),
                   const SizedBox(height: 40),
                   const CustomeButton(titleButton: 'Establecer rutina', screen: BodyPartScreen(),),
-                  const CustomeButton(titleButton: 'Rutina personalizada', screen: SelectExercisesScreen(),)],
+                   CustomeButton(titleButton: 'Rutina personalizada', screen: SavedRoutinesScreen(),)],
               ),
             ),
           ),

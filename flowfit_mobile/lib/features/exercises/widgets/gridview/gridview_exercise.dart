@@ -1,29 +1,14 @@
+import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
+import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/container_exercice.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Exercise {
-  final String name;
-  final String gifUrl;
-  final dynamic bodyPart;
-  final dynamic instructions;
-
-  Exercise({this.bodyPart, this.instructions, required this.name, required this.gifUrl});
-
-  factory Exercise.fromJson(Map<String, dynamic> json) {
-    return Exercise(
-      name: json['name'],
-      gifUrl: json['gifUrl'],
-      bodyPart: json['bodyPart'],
-      instructions: json['instructions'],
-    );
-  }
-}
-
 class GridViewContainer extends StatefulWidget {
-  const GridViewContainer({Key? key}) : super(key: key);
+  final Function(List<Exercise>) selectedExercises;
+
+  const GridViewContainer({Key? key,required this.selectedExercises}) : super(key: key);
 
   @override
   _GridViewContainerState createState() => _GridViewContainerState();
@@ -31,6 +16,7 @@ class GridViewContainer extends StatefulWidget {
 
 class _GridViewContainerState extends State<GridViewContainer> {
   late List<Exercise> filteredExercises = [];
+  late List<Exercise> selectedExercises = [];
   late List<Exercise> exercises = [];
   bool _isLoading = true;
   TextEditingController searchController = TextEditingController();
@@ -94,52 +80,104 @@ class _GridViewContainerState extends State<GridViewContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: TextField(
-            cursorColor:PrimaryTheme.secundaryColor ,
-            controller: searchController,
-            onChanged: _filterExercises,
-            decoration:  InputDecoration(
-              hoverColor: PrimaryTheme.secundaryColor,
-              hintText: 'Buscar ejercicio',
-              prefixIcon: const Icon(Icons.search),
-              border: const OutlineInputBorder(
-                borderSide: BorderSide(color: PrimaryTheme.secundaryColor)
-              ),
-              focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: PrimaryTheme.secundaryColor), 
-      borderRadius: BorderRadius.circular(20))
-            ),
-          ),
-        ),
-        if (!_isLoading && filteredExercises.isNotEmpty)
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredExercises.length,
-              itemBuilder: (context, index) {
-                final exercise = filteredExercises[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ContainerExercice(
-                    name: exercise.name,
-                    gifUrl: exercise.gifUrl,
-                    instructions: exercise.instructions is String ? exercise.instructions : exercise.instructions.join(', '),
-                    bodyPart: exercise.bodyPart is String ? exercise.bodyPart : exercise.bodyPart.join(', '),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Seleccionar Ejercicios"),
+      ),
+      body: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: TextField(
+                  cursorColor: PrimaryTheme.secundaryColor,
+                  controller: searchController,
+                  onChanged: _filterExercises,
+                  decoration: InputDecoration(
+                    hoverColor: PrimaryTheme.secundaryColor,
+                    hintText: 'Buscar ejercicio',
+                    prefixIcon: const Icon(Icons.search),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide(color: PrimaryTheme.secundaryColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: PrimaryTheme.secundaryColor),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                );
+                ),
+              ),
+              if (!_isLoading && filteredExercises.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredExercises.length,
+                    itemBuilder: (context, index) {
+                      final exercise = filteredExercises[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child:GestureDetector(
+  onTap: () {
+    setState(() {
+      if (!selectedExercises.contains(exercise)) {
+        selectedExercises.add(exercise);
+      } else {
+        selectedExercises.remove(exercise);
+      }
+    });
+    widget.selectedExercises(selectedExercises);
+  },
+  child: ContainerExercice(
+    name: exercise.name,
+    gifUrl: exercise.gifUrl,
+    instructions: exercise.instructions is String
+        ? exercise.instructions
+        : exercise.instructions.join(', '),
+    bodyPart: exercise.bodyPart is String
+        ? exercise.bodyPart
+        : exercise.bodyPart.join(', '),
+    isSelected: selectedExercises.contains(exercise),
+     onTap: () {
+    setState(() {
+      if (selectedExercises.contains(exercise)) {
+        selectedExercises.remove(exercise);
+      } else {
+        selectedExercises.add(exercise);
+      }
+    });
+       }, 
+  ),
+),
+                      );
+                    },
+                  ),
+                ),
+              if (_isLoading || filteredExercises.isEmpty)
+                Expanded(
+                  child: Center(
+                    child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('No se encontraron ejercicios'),
+                  ),
+                ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton.extended(
+              onPressed: () {
+print(selectedExercises.map((exercise) => exercise.name).toList());
+
+ Navigator.pop(context, selectedExercises);
               },
+              label: const Text('Confirmar selección'),
+              icon: const Icon(Icons.check),
+              backgroundColor: PrimaryTheme.secundaryColor,
             ),
           ),
-        if (_isLoading || filteredExercises.isEmpty)
-          Expanded(
-            child: Center(
-              child: _isLoading ? const CircularProgressIndicator() : const Text('No se encontraron ejercicios'),
-            ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -2,8 +2,9 @@ import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomExerciseHeader extends StatelessWidget {
+  final String name;
   const CustomExerciseHeader({
-    super.key, required this.appResource,
+    super.key, required this.appResource, required this.name,
   });
 
   final String appResource;
@@ -34,7 +35,7 @@ class CustomExerciseHeader extends StatelessWidget {
             Column(
               children: [
                 Text('RUTINA', style: FontStyle.titleTextStyle.copyWith(color: Colors.white),),
-                Text('PIERNA', style: FontStyle.subtitleTextStyle.copyWith(color: Colors.white, fontWeight: FontWeight.w400),),
+                Text(name, style: FontStyle.subtitleTextStyle.copyWith(color: Colors.white, fontWeight: FontWeight.w400),),
               ],
             ),
           ],
