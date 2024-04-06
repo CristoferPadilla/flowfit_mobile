@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 
 class CustomFielData extends StatelessWidget {
+  final IconData? icon;
   final String title;
   final String name;
   final Widget screen;
@@ -10,7 +11,7 @@ class CustomFielData extends StatelessWidget {
   const CustomFielData({
     Key? key,
     required this.title,
-     required this.name, required this.screen,
+     required this.name, required this.screen, this.icon,
   }) : super(key: key);
 
   @override
@@ -59,7 +60,7 @@ class CustomFielData extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: (){},
-                  child: const Icon(Icons.navigate_next_outlined, color: Colors.white,),
+                  child:  Icon(icon, color: Colors.white,),
                 )
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
+import 'package:flowfit_mobile/features/login/screen/login_screen.dart';
 import 'package:flowfit_mobile/features/profile/screens/config_sccount_screen.dart';
 import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.dart';
 import 'package:flowfit_mobile/features/profile/widget/textfield/custom_textfield.dart';
@@ -79,8 +80,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   if (username.isNotEmpty)
                     const CustomFielData(
                       title: 'Configuración de la cuenta ',
+                      icon: Icons.navigate_next_outlined,
                       name: '',
                       screen: ConfigAccountScreen(),
+                    ),
+                    const CustomFielData(
+                      title: 'Cerrar sesión',
+                      icon: Icons.logout,
+                      name: '',
+                      screen: LoginScreen(),
                     ),
                 ],
               ),
