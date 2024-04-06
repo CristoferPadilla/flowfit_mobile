@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flowfit_mobile/features/login/screen/login_screen.dart';
 import 'package:flowfit_mobile/features/profile/screens/config_sccount_screen.dart';
@@ -6,7 +7,6 @@ import 'package:flowfit_mobile/features/profile/widget/textfield/custom_textfiel
 import 'package:flowfit_mobile/features/scanner/screen/scanner_screen.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -34,17 +34,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = false;
     });
   }
-   Future<void> logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('lastLoginTime');
-    await prefs.setBool('isLoggedIn', false);
 
-    // Redirecciona a la pantalla de inicio de sesión
+  void _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+    await prefs.remove('lastLoginTime');
+
+    // Redirigir al inicio de sesión
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 
@@ -82,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const IconProfileStack(isEdit: false ,),
+                  const IconProfileStack(isEdit: false),
                   Center(
                     child: Text(
                       username.isNotEmpty ? username : 'Loading...',
@@ -91,23 +90,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 20),
                   if (username.isNotEmpty)
-                     CustomFieldData(
+                    CustomFieldData(
                       title: 'Configuración de la cuenta ',
                       icon: Icons.navigate_next_outlined,
                       name: '',
-                      onTap: () => const ConfigAccountScreen() ,
-                      screen: const ConfigAccountScreen(),
-
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ConfigAccountScreen(),
+                          ),
+                        );
+                      },
+                      screen: ConfigAccountScreen(),
                     ),
-                     CustomFieldData(
-                      title: 'Cerrar sesión',
-                      icon: Icons.logout,
-                      name: '',
-                      screen: const LoginScreen(),
-                        onTap: () {
-    logout();
-  },
-                    ),
+                  CustomFieldData(
+                    title: 'Cerrar sesión',
+                    icon: Icons.logout,
+                    name: '',
+                    screen: null,
+                    onTap: () {
+                      _logout();
+                    },
+                  ),
                 ],
               ),
       ),

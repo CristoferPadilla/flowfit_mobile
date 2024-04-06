@@ -164,7 +164,7 @@ void _handleRoutineSelection(String selectedRoutineName) {
       ),
       body: savedRoutines.isEmpty
           ? const Center(
-              child: Text('No hay rutinas válidas guardadas'),
+              child: Text('No hay rutinas guardadas'),
             )
           : ListView.builder(
               itemCount: savedRoutines.length,
@@ -189,7 +189,6 @@ void _handleRoutineSelection(String selectedRoutineName) {
                     shape: const Border(
                         bottom: BorderSide(color: Colors.grey, width: 0.5)),
                     onTap: () async {
-                      // Filter out null elements for safe assignment
                       final parsedExercises =
                           exercises.whereType<Exercise>().toList();
 

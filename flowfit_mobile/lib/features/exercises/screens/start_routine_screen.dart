@@ -26,11 +26,10 @@ class StartRoutineScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text('EJERCICIOS EN LA LISTA: ${exercises.length}', style: FontStyle.descriptionTextStyle.copyWith(color: Colors.black)),
             ),
-            ExerciseListView(exercises: exercises),
+            ExerciseListView(exercises: exercises), // Pass the exercises list directly
           ],
         ),
       ),
     );
   }
 }
-

@@ -6,14 +6,14 @@ class CustomFieldData extends StatelessWidget {
   final IconData? icon;
   final String title;
   final String name;
-  final Widget screen;
+  final Widget? screen; // Cambiado a Widget?
   final void Function()? onTap;
 
   const CustomFieldData({
     Key? key,
     required this.title,
     required this.name,
-    required this.screen,
+    this.screen, // Cambiado a Widget?
     this.icon,
     this.onTap,
   }) : super(key: key);
@@ -21,10 +21,7 @@ class CustomFieldData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () { Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => screen),
-      );},
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
@@ -57,10 +54,8 @@ class CustomFieldData extends StatelessWidget {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Icon(icon, color: Colors.white),
-                )
+                if (icon != null) // Asegúrate de que icon no sea nulo
+                  Icon(icon, color: Colors.white),
               ],
             ),
           ),

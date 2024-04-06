@@ -1,7 +1,8 @@
 import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
-import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/container_exercice.dart';
+import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,12 +12,13 @@ class GridViewContainer extends StatefulWidget {
   const GridViewContainer({Key? key, required this.selectedExercises}) : super(key: key);
 
   @override
-  __GridViewContainerStateState createState() => __GridViewContainerStateState();
+  _GridViewContainerState createState() => _GridViewContainerState();
 }
 
-class __GridViewContainerStateState extends State<GridViewContainer> {
+class _GridViewContainerState extends State<GridViewContainer> {
   late List<Exercise> filteredExercises = [];
   late List<Exercise> selectedExercises;
+  String? selectedEquipment; // Equipment filter state
 
   @override
   void initState() {
@@ -50,8 +52,11 @@ class __GridViewContainerStateState extends State<GridViewContainer> {
 
   void _filterExercises(String searchTerm) async {
     try {
+      final url = selectedEquipment != null
+          ? 'https://exercisedb.p.rapidapi.com/exercises/equipment/$selectedEquipment'
+          : 'https://exercisedb.p.rapidapi.com/exercises/name/$searchTerm';
       final response = await http.get(
-        Uri.parse('https://exercisedb.p.rapidapi.com/exercises/name/$searchTerm'),
+        Uri.parse(url),
         headers: {
           'X-RapidAPI-Key': '4605281141msh0e98e818c927662p1348bfjsn25e19f56beb8',
           'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
@@ -88,7 +93,7 @@ class __GridViewContainerStateState extends State<GridViewContainer> {
                   cursorColor: PrimaryTheme.secundaryColor,
                   onChanged: _filterExercises,
                   decoration: InputDecoration(
-                    hintText: 'Buscar ejercicio',
+                    hintText: 'Buscar ejercicio (o filtrar por equipo)',
                     prefixIcon: const Icon(Icons.search),
                     border: const OutlineInputBorder(
                       borderSide: BorderSide(color: PrimaryTheme.secundaryColor),
@@ -98,6 +103,36 @@ class __GridViewContainerStateState extends State<GridViewContainer> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
+                ),
+              ),
+              // Equipment filter dropdown
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Equipment:', style: FontStyle.descriptionTextStyle.copyWith(color: Colors.black87),),
+                    DropdownButton<String>(
+                      value: selectedEquipment,
+                      hint: const Text('Filtrar por equipo'),
+                      items: [
+                        const DropdownMenuItem(
+                          value: null,
+                          child: Text('Sin filtro'),
+                        ),
+                        ...equipmentList.map((equipment) => DropdownMenuItem(
+                          value: equipment,
+                          child: Text(equipment),
+                        )),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedEquipment = value;
+                          _filterExercises(''); // Trigger filter with updated equipment
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
               if (filteredExercises.isNotEmpty)
@@ -156,7 +191,6 @@ class __GridViewContainerStateState extends State<GridViewContainer> {
             child: FloatingActionButton.extended(
               onPressed: () {
                 print(selectedExercises.map((exercise) => exercise.name).toList());
-
                 Navigator.pop(context, selectedExercises);
               },
               label: const Text('Confirmar selección'),
@@ -169,3 +203,35 @@ class __GridViewContainerStateState extends State<GridViewContainer> {
     );
   }
 }
+
+// List of available equipment for the dropdown
+const List<String> equipmentList = [
+  'assisted',
+  'band',
+  'barbell',
+  'body weight',
+  'bosu ball',
+  'cable',
+  'dumbbell',
+  'elliptical machine',
+  'eZ barbell',
+  'hammer',
+  'kettlebell',
+  'leverage machine',
+  'medicine ball',
+  'olympic barbell',
+  'resistance band',
+  'roller',
+  'rope',
+  'skierg machine',
+  'sled machine',
+  'smith machine',
+  'stability ball',
+  'stationary bike',
+  'stepmill machine',
+  'tire',
+  'trap bar',
+  'upper body ergometer',
+  'weighted',
+  'wheel roller',
+];
