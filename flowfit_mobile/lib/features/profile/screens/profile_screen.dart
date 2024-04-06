@@ -91,18 +91,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 20),
                   if (username.isNotEmpty)
-                    const CustomFieldData(
+                     CustomFieldData(
                       title: 'Configuración de la cuenta ',
                       icon: Icons.navigate_next_outlined,
                       name: '',
-                      screen: ConfigAccountScreen(),
+                      onTap: () => const ConfigAccountScreen() ,
+                      screen: const ConfigAccountScreen(),
 
                     ),
                      CustomFieldData(
                       title: 'Cerrar sesión',
                       icon: Icons.logout,
                       name: '',
-                      screen: LoginScreen(),
+                      screen: const LoginScreen(),
                         onTap: () {
     logout();
   },

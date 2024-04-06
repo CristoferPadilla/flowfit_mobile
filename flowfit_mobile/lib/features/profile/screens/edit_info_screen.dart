@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,7 +146,12 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                           onPressed: () {
                             _saveChanges();
                           },
-                          child: const Text('Guardar Cambios'),
+                          child: const Text('Guardar Cambios', style: TextStyle(color:Colors.white),),
+                          style: ElevatedButton.styleFrom(
+    backgroundColor: PrimaryTheme.secundaryColor,
+    minimumSize: const Size(double.infinity, 48.0), // Adjust width and height as needed
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+  ),
                         ),
                       ],
                     ),
@@ -233,7 +239,12 @@ class CustomTextField extends StatelessWidget {
         obscureText: isPassword &&
             !isPasswordVisible, // Ocultar el texto de la contraseña si no es visible
         decoration: InputDecoration(
+           focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: PrimaryTheme.secundaryColor),
+    ),
           labelText: label,
+                labelStyle: const TextStyle(fontSize: 16.0, color: Colors.black54),
+                
           border: OutlineInputBorder(),
           suffixIcon: isPassword
               ? IconButton(

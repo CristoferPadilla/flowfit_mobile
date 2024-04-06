@@ -21,13 +21,10 @@ class CustomFieldData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap != null
-          ? () {
-              if (onTap != null) {
-                onTap!();
-              }
-            }
-          : null,
+      onTap: () { Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+      );},
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(

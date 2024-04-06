@@ -15,4 +15,13 @@ class Exercise {
       instructions: json['instructions'],
     );
   }
+    static Exercise fromMap(Map<String, dynamic> map) {
+    return Exercise(
+      name: map['name'] as String,
+      gifUrl: map['gifUrl'] as String,
+      bodyPart: map['bodyPart'] as String,
+      instructions: (map['instructions'] as List<dynamic>).cast<String>(),
+    );
+  }
+
 }
