@@ -62,15 +62,31 @@ class _CreateRoutineFormState extends State<CreateRoutineForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextFormField(
-            controller: routineNameController,
-            decoration: const InputDecoration(labelText: 'Nombre de la rutina'),
-          ),
+Padding(
+  padding: const EdgeInsets.symmetric(vertical: 8),
+  child: TextFormField(
+    
+    controller: routineNameController,
+    decoration: InputDecoration(
+          focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: PrimaryTheme.secundaryColor),
+    ),
+      labelText: 'Nombre de la rutina',
+      labelStyle: const TextStyle(fontSize: 16.0, color: Colors.black54),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    ),
+  ),
+),
           ElevatedButton(
-             style: const ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              PrimaryTheme.secundaryColor
-                            )),
+              style: ElevatedButton.styleFrom(
+    backgroundColor: PrimaryTheme.secundaryColor,
+    minimumSize: const Size(double.infinity, 48.0), // Adjust width and height as needed
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+  ),
             onPressed: () async {
               final List<Exercise>? exercises = await Navigator.push(
                 context,
@@ -96,17 +112,29 @@ class _CreateRoutineFormState extends State<CreateRoutineForm> {
               itemBuilder: (context, index) {
                 final exercise = selectedExercises[index];
                 return ListTile(
-                  title: Text(exercise.name),
-                  leading: Image.network(exercise.gifUrl),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete), // Icono para eliminar
-                    onPressed: () {
-                      setState(() {
-                        selectedExercises.removeAt(index);
-                      });
-                    },
-                  ),
-                );
+  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  title: Text(
+    exercise.name,
+    style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+  ),
+  leading: ClipRRect(
+    borderRadius: BorderRadius.circular(8.0),
+    child: Image.network(
+      exercise.gifUrl,
+      width: 50.0,
+      height: 50.0,
+      fit: BoxFit.cover, // Adjust fit as needed (e.g., BoxFit.contain)
+    ),
+  ),
+  trailing: IconButton(
+    icon: const Icon(Icons.delete, color: Colors.red), // Red icon for deletion
+    onPressed: () {
+      setState(() {
+        selectedExercises.removeAt(index);
+      });
+    },
+  ),
+);
               },
             ),
           ),
@@ -116,10 +144,10 @@ class _CreateRoutineFormState extends State<CreateRoutineForm> {
               saveRoutine(routineName);
             },
             child: const Text('Guardar Rutina',    style: TextStyle(color: Colors.white),),
-            style: const ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              PrimaryTheme.secundaryColor
-                            ),
+style: ElevatedButton.styleFrom(
+    backgroundColor: PrimaryTheme.secundaryColor,
+    minimumSize: const Size(double.infinity, 48.0), // Adjust width and height as needed
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
             ),
           ),
