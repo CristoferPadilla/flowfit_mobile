@@ -34,6 +34,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = false;
     });
   }
+   Future<void> logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('lastLoginTime');
+    await prefs.setBool('isLoggedIn', false);
+
+    // Redirecciona a la pantalla de inicio de sesión
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,17 +91,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 20),
                   if (username.isNotEmpty)
-                    const CustomFielData(
+                    const CustomFieldData(
                       title: 'Configuración de la cuenta ',
                       icon: Icons.navigate_next_outlined,
                       name: '',
                       screen: ConfigAccountScreen(),
+
                     ),
-                    const CustomFielData(
+                     CustomFieldData(
                       title: 'Cerrar sesión',
                       icon: Icons.logout,
                       name: '',
                       screen: LoginScreen(),
+                        onTap: () {
+    logout();
+  },
                     ),
                 ],
               ),

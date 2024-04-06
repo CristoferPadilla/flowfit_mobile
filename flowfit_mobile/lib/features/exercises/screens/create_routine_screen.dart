@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/gridview/gridview_exercise.dart';
@@ -14,7 +15,7 @@ class CreateRoutineScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Crear Rutina"),
       ),
-      body: CreateRoutineForm(),
+      body: const CreateRoutineForm(),
     );
   }
 }
@@ -66,6 +67,10 @@ class _CreateRoutineFormState extends State<CreateRoutineForm> {
             decoration: const InputDecoration(labelText: 'Nombre de la rutina'),
           ),
           ElevatedButton(
+             style: const ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                              PrimaryTheme.secundaryColor
+                            )),
             onPressed: () async {
               final List<Exercise>? exercises = await Navigator.push(
                 context,
@@ -82,7 +87,8 @@ class _CreateRoutineFormState extends State<CreateRoutineForm> {
                 });
               }
             },
-            child: const Text('Seleccionar ejercicios'),
+            child: const Text('Seleccionar ejercicios', style: TextStyle(color: Colors.white),),
+            
           ),
           Expanded(
             child: ListView.builder(
@@ -109,7 +115,13 @@ class _CreateRoutineFormState extends State<CreateRoutineForm> {
               final routineName = routineNameController.text;
               saveRoutine(routineName);
             },
-            child: const Text('Guardar Rutina'),
+            child: const Text('Guardar Rutina',    style: TextStyle(color: Colors.white),),
+            style: const ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                              PrimaryTheme.secundaryColor
+                            ),
+
+            ),
           ),
         ],
       ),

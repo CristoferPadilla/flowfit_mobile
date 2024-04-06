@@ -1,31 +1,33 @@
-import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 
-class CustomFielData extends StatelessWidget {
+class CustomFieldData extends StatelessWidget {
   final IconData? icon;
   final String title;
   final String name;
   final Widget screen;
+  final void Function()? onTap;
 
-  const CustomFielData({
+  const CustomFieldData({
     Key? key,
     required this.title,
-     required this.name, required this.screen, this.icon,
+    required this.name,
+    required this.screen,
+    this.icon,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => screen,
-                ),
-              );
-      },
+      onTap: onTap != null
+          ? () {
+              if (onTap != null) {
+                onTap!();
+              }
+            }
+          : null,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
@@ -59,8 +61,8 @@ class CustomFielData extends StatelessWidget {
                   ],
                 ),
                 GestureDetector(
-                  onTap: (){},
-                  child:  Icon(icon, color: Colors.white,),
+                  onTap: () {},
+                  child: Icon(icon, color: Colors.white),
                 )
               ],
             ),
