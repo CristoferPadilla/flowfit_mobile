@@ -6,24 +6,22 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GridViewContainer extends StatefulWidget {
-  final Function(List<Exercise>) selectedExercises;
+  final List<Exercise> selectedExercises;
 
-  const GridViewContainer({Key? key,required this.selectedExercises}) : super(key: key);
+  const GridViewContainer({Key? key, required this.selectedExercises}) : super(key: key);
 
   @override
-  _GridViewContainerState createState() => _GridViewContainerState();
+  __GridViewContainerStateState createState() => __GridViewContainerStateState();
 }
 
-class _GridViewContainerState extends State<GridViewContainer> {
+class __GridViewContainerStateState extends State<GridViewContainer> {
   late List<Exercise> filteredExercises = [];
-  late List<Exercise> selectedExercises = [];
-  late List<Exercise> exercises = [];
-  bool _isLoading = true;
-  TextEditingController searchController = TextEditingController();
+  late List<Exercise> selectedExercises;
 
   @override
   void initState() {
     super.initState();
+    selectedExercises = List.from(widget.selectedExercises);
     fetchExercises();
   }
 
@@ -40,18 +38,13 @@ class _GridViewContainerState extends State<GridViewContainer> {
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
         setState(() {
-          exercises = responseData.map((json) => Exercise.fromJson(json)).toList();
-          filteredExercises = List.from(exercises);
-          _isLoading = false;
+          filteredExercises = responseData.map((json) => Exercise.fromJson(json)).toList();
         });
       } else {
         throw Exception('Failed to load exercises');
       }
     } catch (error) {
       print(error);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -93,10 +86,8 @@ class _GridViewContainerState extends State<GridViewContainer> {
                 padding: const EdgeInsets.all(15.0),
                 child: TextField(
                   cursorColor: PrimaryTheme.secundaryColor,
-                  controller: searchController,
                   onChanged: _filterExercises,
                   decoration: InputDecoration(
-                    hoverColor: PrimaryTheme.secundaryColor,
                     hintText: 'Buscar ejercicio',
                     prefixIcon: const Icon(Icons.search),
                     border: const OutlineInputBorder(
@@ -109,7 +100,7 @@ class _GridViewContainerState extends State<GridViewContainer> {
                   ),
                 ),
               ),
-              if (!_isLoading && filteredExercises.isNotEmpty)
+              if (filteredExercises.isNotEmpty)
                 Expanded(
                   child: ListView.builder(
                     itemCount: filteredExercises.length,
@@ -117,48 +108,45 @@ class _GridViewContainerState extends State<GridViewContainer> {
                       final exercise = filteredExercises[index];
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child:GestureDetector(
-  onTap: () {
-    setState(() {
-      if (!selectedExercises.contains(exercise)) {
-        selectedExercises.add(exercise);
-      } else {
-        selectedExercises.remove(exercise);
-      }
-    });
-    widget.selectedExercises(selectedExercises);
-  },
-  child: ContainerExercice(
-    name: exercise.name,
-    gifUrl: exercise.gifUrl,
-    instructions: exercise.instructions is String
-        ? exercise.instructions
-        : exercise.instructions.join(', '),
-    bodyPart: exercise.bodyPart is String
-        ? exercise.bodyPart
-        : exercise.bodyPart.join(', '),
-    isSelected: selectedExercises.contains(exercise),
-     onTap: () {
-    setState(() {
-      if (selectedExercises.contains(exercise)) {
-        selectedExercises.remove(exercise);
-      } else {
-        selectedExercises.add(exercise);
-      }
-    });
-       }, 
-  ),
-),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (!selectedExercises.contains(exercise)) {
+                                selectedExercises.add(exercise);
+                              } else {
+                                selectedExercises.remove(exercise);
+                              }
+                            });
+                          },
+                          child: ContainerExercice(
+                            name: exercise.name,
+                            gifUrl: exercise.gifUrl,
+                            instructions: exercise.instructions is String
+                                ? exercise.instructions
+                                : exercise.instructions.join(', '),
+                            bodyPart: exercise.bodyPart is String
+                                ? exercise.bodyPart
+                                : exercise.bodyPart.join(', '),
+                            isSelected: selectedExercises.contains(exercise),
+                            onTap: () {
+                              setState(() {
+                                if (selectedExercises.contains(exercise)) {
+                                  selectedExercises.remove(exercise);
+                                } else {
+                                  selectedExercises.add(exercise);
+                                }
+                              });
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),
                 ),
-              if (_isLoading || filteredExercises.isEmpty)
+              if (filteredExercises.isEmpty)
                 Expanded(
                   child: Center(
-                    child: _isLoading
-                        ? const CircularProgressIndicator()
-                        : const Text('No se encontraron ejercicios'),
+                    child: Text('No se encontraron ejercicios'),
                   ),
                 ),
             ],
@@ -167,9 +155,9 @@ class _GridViewContainerState extends State<GridViewContainer> {
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton.extended(
               onPressed: () {
-print(selectedExercises.map((exercise) => exercise.name).toList());
+                print(selectedExercises.map((exercise) => exercise.name).toList());
 
- Navigator.pop(context, selectedExercises);
+                Navigator.pop(context, selectedExercises);
               },
               label: const Text('Confirmar selección'),
               icon: const Icon(Icons.check),
