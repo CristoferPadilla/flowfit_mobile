@@ -1,126 +1,126 @@
-import 'package:flowfit_mobile/features/first-steps/widget/buttons/section_buttons.dart';
-import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
+import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionExerciseScreen extends StatelessWidget {
   final String name;
   final String gifUrl;
-  final String? bodyPart;
-  final String? instructions;
+  final String bodyPart;
+  final String instructions;
 
   const DescriptionExerciseScreen({
     Key? key,
     required this.name,
     required this.gifUrl,
-    this.bodyPart,
-    this.instructions,
+    required this.bodyPart,
+    required this.instructions,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String? formattedInstructions = instructions?.replaceAll(',', '\n');
+    final height = MediaQuery.of(context).size.height;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(90),
-          child: CustomeAppbar(
-            title: 'Aprende',
-            subtitle: '¡Repasa y aprende con técnica!',
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: Placeholder(
-                    child: Image(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        gifUrl,
-                      ),
-                      width: double.infinity,
-                      height: 250,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: height * 0.5,
+              child: Stack(
+                children: [
+                  Image.network(
+                    gifUrl,
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: FloatingActionButton(
+                      onPressed: () {},
+                      child: const Icon(Icons.play_arrow),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+ Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Icon(Icons.fitness_center, color: Colors.blue),
+        SizedBox(width: 4,),
+        Text(
+          name,
+          maxLines: 1, 
+          overflow: TextOverflow.fade, 
+          style: FontStyle.cardTextStyle.copyWith(fontSize: 14),
+        ),
+      ],
+    ),
+    const SizedBox(height: 10),
+    Text(
+      'Se ejercita: $bodyPart',
+      style: const TextStyle(fontSize: 16),
+    ),
+                      const SizedBox(height: 10),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Nombre del ejercicio:  ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Instrucciones",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    instructions,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Área que se entrena:  ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      bodyPart ?? 'No disponible',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Atrás"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Instrucciones',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(formattedInstructions ?? "No disponible"),
-                  ],
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Siguiente"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
                 ),
-              ),
-              SectionButtons(
-                isBackButtonVisible: true,
-                isFrontButtonVisible: false,
-                screen: DescriptionExerciseScreen(
-                  name: name,
-                  gifUrl: gifUrl,
-                ),
-              )
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );

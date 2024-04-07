@@ -32,7 +32,7 @@ class _IconProfileStackState extends State<IconProfileStack> {
 
   Future<void> loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final imageUrl = prefs.getString('picture_profile_url');
+    final imageUrl = prefs.getString('profile_picture'); // Utiliza la misma clave utilizada en _getUserData()
     if (imageUrl != null && imageUrl.isNotEmpty) {
       setState(() {
         _imageUrl = imageUrl;
@@ -47,20 +47,17 @@ class _IconProfileStackState extends State<IconProfileStack> {
       );
 
       if (pickedFile != null) {
+        final String imageUrl = pickedFile.path;
         setState(() {
-          _imageUrl = pickedFile.path;
-          widget.onImageSelected!(_imageUrl);
-          saveImageData(_imageUrl!);
+          _imageUrl = imageUrl;
         });
+        // No es necesario guardar la imagen local en SharedPreferences aquí
+        // ya que solo la usamos para mostrarla temporalmente.
+        // Guardar la imagen en el servidor se manejará en EditUserInfoScreen.
       }
     } catch (e) {
       print('Error al seleccionar la imagen: $e');
     }
-  }
-
-  Future<void> saveImageData(String imageUrl) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('picture_profile_url', imageUrl);
   }
 
   @override
@@ -87,7 +84,7 @@ class _IconProfileStackState extends State<IconProfileStack> {
               child: ClipOval(
                 child: _imageUrl != null
                     ? Image.file(
-                        File(_imageUrl!),
+                        File(_imageUrl!), // Carga la imagen local desde la ruta
                         fit: BoxFit.cover,
                         width: 150,
                         height: 150,
@@ -101,9 +98,7 @@ class _IconProfileStackState extends State<IconProfileStack> {
         ),
         if (widget.isEdit)
           GestureDetector(
-            onTap: () {
-              _pickImage();
-            },
+            onTap: _pickImage,
             child: Padding(
               padding: const EdgeInsets.only(top: 100, left: 100),
               child: Container(

@@ -1,6 +1,5 @@
 import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/container_exercice.dart';
-import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -91,7 +90,9 @@ class _GridViewContainerState extends State<GridViewContainer> {
                 padding: const EdgeInsets.all(15.0),
                 child: TextField(
                   cursorColor: PrimaryTheme.secundaryColor,
-                  onChanged: _filterExercises,
+                  onChanged: (value) {
+                    _filterExercises(value); // Trigger filter with search term
+                  },
                   decoration: InputDecoration(
                     hintText: 'Buscar ejercicio (o filtrar por equipo)',
                     prefixIcon: const Icon(Icons.search),
@@ -107,11 +108,11 @@ class _GridViewContainerState extends State<GridViewContainer> {
               ),
               // Equipment filter dropdown
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal:15.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Equipment:', style: FontStyle.descriptionTextStyle.copyWith(color: Colors.black87),),
+                    Text('Equipment:', style: TextStyle(color: Colors.black87)),
                     DropdownButton<String>(
                       value: selectedEquipment,
                       hint: const Text('Filtrar por equipo'),
@@ -204,34 +205,3 @@ class _GridViewContainerState extends State<GridViewContainer> {
   }
 }
 
-// List of available equipment for the dropdown
-const List<String> equipmentList = [
-  'assisted',
-  'band',
-  'barbell',
-  'body weight',
-  'bosu ball',
-  'cable',
-  'dumbbell',
-  'elliptical machine',
-  'eZ barbell',
-  'hammer',
-  'kettlebell',
-  'leverage machine',
-  'medicine ball',
-  'olympic barbell',
-  'resistance band',
-  'roller',
-  'rope',
-  'skierg machine',
-  'sled machine',
-  'smith machine',
-  'stability ball',
-  'stationary bike',
-  'stepmill machine',
-  'tire',
-  'trap bar',
-  'upper body ergometer',
-  'weighted',
-  'wheel roller',
-];

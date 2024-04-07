@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
@@ -17,6 +16,8 @@ class EditUserInfoScreen extends StatefulWidget {
 }
 
 class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
+  String? _imageUrl;
+
   late TextEditingController _usernameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
@@ -58,7 +59,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 _passwordController.text = userData['password'];
                 _emailController.text = userData['email'];
                 _phoneController.text = userData['phone'];
-                _profilePicturePath = userData['profile_picture'];
+                _imageUrl = userData['profile_picture'];
                 _isLoading = false;
               });
               return;
@@ -69,8 +70,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
           print('La respuesta del servidor no contiene datos válidos');
         }
       } else {
-        print(
-            'Error al obtener los datos del usuario: ${response.statusCode}');
+        print('Error al obtener los datos del usuario: ${response.statusCode}');
       }
     } catch (e) {
       print('Error de conexión: $e');
@@ -79,7 +79,6 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
       });
     }
   }
-
 
   @override
   void dispose() {
@@ -105,7 +104,8 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                     isEdit: true,
                     onImageSelected: (imagePath) {
                       setState(() {
-                        _profilePicturePath = imagePath; // Actualiza la ruta de la imagen en EditUserInfoScreen
+                        _profilePicturePath =
+                            imagePath; // Actualiza la ruta de la imagen en EditUserInfoScreen
                       });
                     },
                   ),
@@ -146,12 +146,17 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                           onPressed: () {
                             _saveChanges();
                           },
-                          child: const Text('Guardar Cambios', style: TextStyle(color:Colors.white),),
+                          child: const Text(
+                            'Guardar Cambios',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           style: ElevatedButton.styleFrom(
-    backgroundColor: PrimaryTheme.secundaryColor,
-    minimumSize: const Size(double.infinity, 48.0), // Adjust width and height as needed
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-  ),
+                            backgroundColor: PrimaryTheme.secundaryColor,
+                            minimumSize: const Size(double.infinity,
+                                48.0), // Adjust width and height as needed
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                          ),
                         ),
                       ],
                     ),
@@ -162,7 +167,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
     );
   }
 
-Future<void> _saveChanges() async {
+ Future<void> _saveChanges() async {
   final newUsername = _usernameController.text;
   final newEmail = _emailController.text;
   final newPhone = _phoneController.text;
@@ -181,9 +186,10 @@ Future<void> _saveChanges() async {
       'password': newPassword,
     };
 
-    // Si hay una nueva imagen de perfil seleccionada, añádela a los datos de la solicitud
     if (_profilePicturePath != null && _profilePicturePath!.isNotEmpty) {
-      requestData['profile_picture'] = base64Encode(File(_profilePicturePath!).readAsBytesSync());
+      // Verificar si se ha seleccionado una nueva imagen de perfil
+      Uint8List imageBytes = await File(_profilePicturePath!).readAsBytes();
+      requestData['profile_picture'] = base64Encode(imageBytes);
     }
 
     final response = await http.put(
@@ -197,8 +203,8 @@ Future<void> _saveChanges() async {
 
     if (response.statusCode == 200) {
       print('Cambios guardados exitosamente.');
-      Navigator.pop(context);
-      // Puedes hacer algo después de guardar los cambios, como navegar a otra pantalla
+      Navigator.pop(context); // Cierra la pantalla de edición después de guardar los cambios
+      // Puedes agregar aquí más lógica, como navegar a otra pantalla
     } else {
       print('Error al guardar los cambios: ${response.statusCode}');
       // Manejar el error apropiadamente, como mostrar un mensaje al usuario
@@ -209,8 +215,9 @@ Future<void> _saveChanges() async {
   }
 }
 
-}
 
+
+  }
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
@@ -239,12 +246,11 @@ class CustomTextField extends StatelessWidget {
         obscureText: isPassword &&
             !isPasswordVisible, // Ocultar el texto de la contraseña si no es visible
         decoration: InputDecoration(
-           focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: PrimaryTheme.secundaryColor),
-    ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: PrimaryTheme.secundaryColor),
+          ),
           labelText: label,
-                labelStyle: const TextStyle(fontSize: 16.0, color: Colors.black54),
-                
+          labelStyle: const TextStyle(fontSize: 16.0, color: Colors.black54),
           border: OutlineInputBorder(),
           suffixIcon: isPassword
               ? IconButton(
