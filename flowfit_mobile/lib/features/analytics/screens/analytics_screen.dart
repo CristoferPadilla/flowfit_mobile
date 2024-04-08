@@ -20,13 +20,45 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   late double _bmi = 0.0;
   late DateTime _endDate;
   bool _isLoading = true;
+  int _consecutiveDays = 0;
 
   @override
   void initState() {
     super.initState();
     _fetchData();
+        _fetchMemberEntries();
+
   }
 
+  Future<void> _fetchMemberEntries() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.get(
+        Uri.parse('https://api-zydf.onrender.com/member_entries/member'),
+        headers: <String, String>{
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = jsonDecode(response.body);
+        List<DateTime> gymDays = [];
+        for (var entry in responseData) {
+          final entryDate = DateTime.parse(entry['entry_time']);
+          gymDays.add(entryDate);
+        }
+        int consecutiveDays = _calculateConsecutiveDays(gymDays);
+        setState(() {
+          _consecutiveDays = consecutiveDays;
+        });
+      } else {
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error de conexión: $e');
+    }
+  }
   Future<void> _fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
@@ -61,6 +93,26 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     } catch (e) {
       print('Error de conexión: $e');
     }
+  }
+
+   int _calculateConsecutiveDays(List<DateTime> gymDays) {
+    if (gymDays.isEmpty) {
+      return 0;
+    }
+
+    gymDays.sort((a, b) => a.compareTo(b));
+
+    int consecutiveDays = 1;
+    for (int i = 1; i < gymDays.length; i++) {
+      final difference = gymDays[i].difference(gymDays[i - 1]);
+      if (difference.inDays == 1) {
+        consecutiveDays++;
+      } else {
+        break;
+      }
+    }
+
+    return consecutiveDays;
   }
 
   @override
@@ -130,11 +182,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '1 ',
+                                  '$_consecutiveDays ',
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
-                                  'Día en racha',
+                                  'Día(s) en racha',
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
