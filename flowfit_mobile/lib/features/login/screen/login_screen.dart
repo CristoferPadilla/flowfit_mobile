@@ -26,12 +26,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
+  late Timer _sessionTimer; // Agrega esta línea
 
   @override
   void initState() {
     super.initState();
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
+        _sessionTimer = Timer(Duration(seconds: 0), () {}); // Inicializa el Timer
+
     _checkLoggedIn();
   }
 
@@ -63,8 +66,15 @@ class _LoginScreenState extends State<LoginScreen> {
             MaterialPageRoute(builder: (context) => const NavBar()),
           );
         }
+                _startSessionTimer(); // Inicia el Timer cuando el usuario ha iniciado sesión
+
       }
     }
+  }
+    void _startSessionTimer() {
+    _sessionTimer = Timer(Duration(hours: 1), () {
+      _logout(); // Cierra la sesión cuando el tiempo expire
+    });
   }
 
   void _login() async {
