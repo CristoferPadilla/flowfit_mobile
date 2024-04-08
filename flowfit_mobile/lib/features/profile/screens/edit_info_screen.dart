@@ -101,7 +101,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
               child: Column(
                 children: [
                   IconProfileStack(
-                    isEdit: true,
+                    isEdit: false,
                     profile_picture: _imageUrl,
                     onImageSelected: (imagePath) {
                       setState(() {

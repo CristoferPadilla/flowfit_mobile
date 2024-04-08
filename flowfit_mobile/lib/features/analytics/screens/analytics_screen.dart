@@ -18,7 +18,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   late double _height = 0.0;
   late double _weight = 0.0;
   late double _bmi = 0.0;
-  late DateTime _endDate;
+  late DateTime _endDate = DateTime.now();
+  late DateTime _startDate = DateTime.now();
   bool _isLoading = true;
   int _consecutiveDays = 0;
   List<DateTime> gymDays = [];
@@ -83,6 +84,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 _weight = double.parse(userData['weight'].toString());
                 _bmi = double.parse(userData['body_fat_percentage'].toString());
                 _endDate = DateTime.parse(userData['end_date'].toString());
+                _startDate = DateTime.parse(userData['registration_date'].toString());
                 _isLoading = false;
               });
               break;
@@ -174,7 +176,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         child: Column(
                           children: [
                             Expanded(
-                              child: CalendarDays(endDate: _endDate, gymDays: gymDays),
+                              child: CalendarDays(endDate: _endDate, gymDays: gymDays, startDate: _startDate,),
                             ),
                             const Divider(
                               color: Colors.grey,

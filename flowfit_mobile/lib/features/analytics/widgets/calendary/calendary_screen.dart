@@ -14,6 +14,7 @@ class WeekDays extends StatefulWidget {
 
 class _WeekDaysState extends State<WeekDays> {
   DateTime? _endDate;
+  DateTime? _startDate;
   List<DateTime> gymDays = [];
   bool _isLoading = true;
 
@@ -32,12 +33,16 @@ class _WeekDaysState extends State<WeekDays> {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final String startDateString = responseData['registration_date'];
+        final int startDateMillisecondsSinceEpoch = int.parse(startDateString);
+        final DateTime startDate = DateTime.fromMillisecondsSinceEpoch(startDateMillisecondsSinceEpoch);
 
         final String endDateString = responseData['end_date'];
         final int endDateMillisecondsSinceEpoch = int.parse(endDateString);
         final DateTime endDate = DateTime.fromMillisecondsSinceEpoch(endDateMillisecondsSinceEpoch);
 
         setState(() {
+          _startDate = startDate;
           _endDate = endDate;
           _isLoading = false;
         });
@@ -48,6 +53,7 @@ class _WeekDaysState extends State<WeekDays> {
       print('Error de conexión: $e');
     }
   }
+  
 
   @override
   void initState() {
@@ -58,30 +64,26 @@ class _WeekDaysState extends State<WeekDays> {
   @override
   Widget build(BuildContext context) {
     return _endDate != null
-        ? CalendarDays(endDate: _endDate!, gymDays: gymDays.map((day) => DateTime(day.year, day.month, day.day)).toList())
+        ? CalendarDays(endDate: _endDate!, gymDays: gymDays.map((day) => DateTime(day.year, day.month, day.day)).toList(), startDate: _startDate!,)
         : CircularProgressIndicator(); 
   }
 }
 
 class CalendarDays extends StatelessWidget {
+  final DateTime startDate;
   final DateTime endDate;
   final List<DateTime> gymDays;
-  final int daysInMonth = DateTime.daysPerWeek * 5;
 
-  CalendarDays({required this.endDate, required this.gymDays, Key? key}) : super(key: key);
+  CalendarDays({required this.startDate, required this.endDate, required this.gymDays, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final currentDate = DateTime.now();
-    final daysUntilEndOfMonth = endDate.day - currentDate.day;
-    final daysToShow = daysUntilEndOfMonth > daysInMonth ? daysInMonth : daysUntilEndOfMonth + 1;
-
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Mes: ${getMonthName(endDate.month)}',
+            'Mes: ${getMonthName(startDate.month)}',
             style: FontStyle.titleTextStyle.copyWith(color: Colors.grey, fontSize: 17),
           ),
         ),
@@ -92,19 +94,42 @@ class CalendarDays extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(
-                daysToShow,
+                _calculateDaysToShow(startDate, endDate),
                 (index) {
-                  final day = currentDate.add(Duration(days: index));
+                  final day = startDate.add(Duration(days: index));
                   final formattedDate = day.day.toString().padLeft(2, '0');
 
-                  final isEndDate = day.day == endDate.day;
-                  final isGymDay = gymDays.any((gymDay) => gymDay.year == day.year && gymDay.month == day.month && gymDay.day == day.day+1);
+                  // Detener el calendario si el día es posterior a la fecha de finalización
+                  if (day.isAfter(endDate)) {
+                    return SizedBox(); // No mostrar más días después de la fecha de finalización
+                  }
+
+                  final isEndDate = day.day == endDate.day && day.month == endDate.month ;
+                  final isStartDate = day.day == startDate.day  && day.month == startDate.month ;
+                  final isGymDay = gymDays.any((gymDay) => gymDay.year == day.year && gymDay.month == day.month && gymDay.day == day.day);
+
+                  // Color del día
+                  Color dayColor;
+                  if (isEndDate) {
+                    dayColor = Colors.red;
+                  } else if (isStartDate) {
+                    dayColor = Colors.green;
+                  } else if (day.month == startDate.month) {
+                    // Si el día está en el mes de inicio, usar el color del gimnasio o blanco
+                    dayColor = isGymDay ? PrimaryTheme.secundaryColor : const Color.fromARGB(255, 142, 142, 142);
+                  } else if (day.month == endDate.month) {
+                    // Si el día está en el mes de fin, usar rojo
+                    dayColor = Colors.grey;
+                  } else {
+                    // Si el día está en otro mes, usar gris
+                    dayColor = Colors.grey;
+                  }
 
                   return Container(
                     width: 40,
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isEndDate ? Colors.red : (isGymDay ? PrimaryTheme.secundaryColor : Colors.white),
+                      color: dayColor,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Column(
@@ -114,14 +139,14 @@ class CalendarDays extends StatelessWidget {
                           _getDayOfWeek(day),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: (isEndDate || isGymDay) ? Colors.white : Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                         Text(
                           formattedDate,
                           style: TextStyle(
                             fontSize: 18,
-                            color: (isEndDate || isGymDay) ? Colors.white : Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -135,6 +160,19 @@ class CalendarDays extends StatelessWidget {
       ],
     );
   }
+
+int _calculateDaysToShow(DateTime startDate, DateTime endDate) {
+  if (startDate.year == endDate.year && startDate.month == endDate.month) {
+    // Si startDate y endDate están en el mismo mes
+    return endDate.day - startDate.day + 1;
+  } else {
+    // Si startDate y endDate están en meses diferentes
+    final daysInStartMonth = DateTime(startDate.year, startDate.month + 1, 0).day;
+    final daysInBetween = daysInStartMonth - startDate.day + 1; // Días restantes en el mes de inicio
+    final daysInEndMonth = endDate.day; // Días en el mes de fin
+    return daysInBetween + daysInEndMonth; // Total de días a mostrar
+  }
+}
 
 
   String _getDayOfWeek(DateTime date) {
