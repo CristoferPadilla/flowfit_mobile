@@ -4,16 +4,11 @@ import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile_stack.d
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 
-class ConfigAccountScreen extends StatefulWidget {
-  const ConfigAccountScreen({Key? key}) : super(key: key);
+class ConfigAccountScreen extends StatelessWidget {
+    final String? imageUrl;
 
-  @override
-  State<ConfigAccountScreen> createState() => _ConfigAccountScreenState();
-  
-}
+  const ConfigAccountScreen({Key? key, this.imageUrl}) : super(key: key);
 
-class _ConfigAccountScreenState extends State<ConfigAccountScreen> {
-  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,7 +28,7 @@ class _ConfigAccountScreenState extends State<ConfigAccountScreen> {
         ),
         body: Column(
           children: [
-            const IconProfileStack(isEdit: false),
+            IconProfileStack(isEdit: false,profile_picture: imageUrl,),
             ContainerInfo(),
           ],
         ),

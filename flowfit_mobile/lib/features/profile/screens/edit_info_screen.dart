@@ -102,6 +102,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 children: [
                   IconProfileStack(
                     isEdit: true,
+                    profile_picture: _imageUrl,
                     onImageSelected: (imagePath) {
                       setState(() {
                         _profilePicturePath =
@@ -142,20 +143,24 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                             });
                           },
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            _saveChanges();
-                          },
-                          child: const Text(
-                            'Guardar Cambios',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: PrimaryTheme.secundaryColor,
-                            minimumSize: const Size(double.infinity,
-                                48.0), // Adjust width and height as needed
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
+
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _saveChanges();
+                            },
+                            child: const Text(
+                              'Guardar Cambios',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: PrimaryTheme.secundaryColor,
+                              minimumSize: const Size(double.infinity,
+                                  48.0), // Adjust width and height as needed
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
+                            ),
                           ),
                         ),
                       ],
