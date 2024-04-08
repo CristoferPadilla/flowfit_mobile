@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:flowfit_mobile/features/analytics/widgets/column/custome_column.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flowfit_mobile/features/analytics/widgets/column/custome_column.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/features/analytics/widgets/card/custome_container_card.dart';
 import 'package:flowfit_mobile/features/analytics/widgets/calendary/calendary_screen.dart';
@@ -18,6 +18,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   late double _height = 0.0;
   late double _weight = 0.0;
   late double _bmi = 0.0;
+  late DateTime _endDate;
   bool _isLoading = true;
 
   @override
@@ -26,41 +27,41 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     _fetchData();
   }
 
-Future<void> _fetchData() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? accessToken = prefs.getString('accessToken');
-  String? id = prefs.getString('id');
-  try {
-    final response = await http.get(
-      Uri.parse('https://api-zydf.onrender.com/members'),
-      headers: <String, String>{
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
+  Future<void> _fetchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String? id = prefs.getString('id');
+    try {
+      final response = await http.get(
+        Uri.parse('https://api-zydf.onrender.com/members'),
+        headers: <String, String>{
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final List<dynamic> responseData = jsonDecode(response.body);
-      if (responseData.isNotEmpty) {
-        for (var userData in responseData) {
-          if (userData['id'].toString() == id) {
-            setState(() {
-              _height = double.parse(userData['height'].toString());
-              _weight = double.parse(userData['weight'].toString());
-              _bmi = double.parse(userData['body_fat_percentage'].toString());
-              _isLoading = false;
-            });
-            break; 
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = jsonDecode(response.body);
+        if (responseData.isNotEmpty) {
+          for (var userData in responseData) {
+            if (userData['id'].toString() == id) {
+              setState(() {
+                _height = double.parse(userData['height'].toString());
+                _weight = double.parse(userData['weight'].toString());
+                _bmi = double.parse(userData['body_fat_percentage'].toString());
+                _endDate = DateTime.parse(userData['end_date'].toString());
+                _isLoading = false;
+              });
+              break; 
+            }
           }
         }
+      } else {
+        print('Error: ${response.reasonPhrase}');
       }
-    } else {
-      print('Error: ${response.reasonPhrase}');
+    } catch (e) {
+      print('Error de conexión: $e');
     }
-  } catch (e) {
-    print('Error de conexión: $e');
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -114,12 +115,12 @@ Future<void> _fetchData() async {
                           ),
                         ),
                       ),
-                      const CustomContainerCard(
+                      CustomContainerCard(
                         height: 0.18,
                         child: Column(
                           children: [
                             Expanded(
-                              child: CalendarDays(),
+                              child: CalendarDays(endDate: _endDate),
                             ),
                             Divider(
                               color: Colors.grey,
@@ -158,7 +159,7 @@ Future<void> _fetchData() async {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              'Estatura: $_height cm',
+                              'Estatura: $_height m',
                               style: const TextStyle(fontSize: 18),
                             ),
                             const SizedBox(height: 8),
