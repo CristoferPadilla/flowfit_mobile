@@ -7,6 +7,11 @@ class CustomeAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> months = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    final String currentMonth = months[DateTime.now().month - 1];
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -18,7 +23,7 @@ class CustomeAppbar extends StatelessWidget {
           Column(
           children: [
             Text(
-              title,
+              currentMonth,
               style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Text(

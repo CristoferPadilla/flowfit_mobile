@@ -2,7 +2,6 @@ import 'package:flowfit_mobile/features/exercises/screens/create_routine_screen.
 import 'package:flowfit_mobile/features/exercises/screens/save_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/routine_option_container.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
-import 'package:flowfit_mobile/features/profile/widget/icon/icon_profile.dart';
 import 'package:flutter/material.dart';
 
 class ExercisesScreen extends StatelessWidget {
@@ -14,16 +13,9 @@ class ExercisesScreen extends StatelessWidget {
       child: Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(90),
-          child: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              CustomeAppbar(title: 'Febrero',subtitle: '¡Hoy es un gran día para entrenar',),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: IconProfile(),
-              )
-            ],
-          ),
+          child: 
+              CustomeAppbar(title: '',subtitle: '¡Hoy es un gran día para entrenar',),
+          
         ),
         backgroundColor: Colors.grey.shade100,
         body: const SingleChildScrollView(

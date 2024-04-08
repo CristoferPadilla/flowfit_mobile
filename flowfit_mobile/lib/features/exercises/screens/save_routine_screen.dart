@@ -7,8 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
 
 class SavedRoutinesScreen extends StatefulWidget {
+  final bool? isDialog;
   final Function(String)? onRoutineSelected;
-  const SavedRoutinesScreen({Key? key, this.onRoutineSelected}) : super(key: key);
+  const SavedRoutinesScreen({Key? key, this.onRoutineSelected, this.isDialog}) : super(key: key);
 
   @override
   _SavedRoutinesScreenState createState() => _SavedRoutinesScreenState();
@@ -25,20 +26,13 @@ class _SavedRoutinesScreenState extends State<SavedRoutinesScreen> {
     loadSavedRoutines();
   }
 void _handleRoutineSelection(String selectedRoutineName) {
-  // Find the selected routine in the savedRoutines list
-  final selectedRoutine = savedRoutines.firstWhere((routine) => routine.name == selectedRoutineName);
-
-  if (selectedRoutine != null) {
-    // Call the onRoutineSelected callback from ListCalendary (if provided)
-    if (widget.onRoutineSelected != null) {
-      widget.onRoutineSelected!(selectedRoutine.name); // Pass the routine name
-    }
-    Navigator.pop(context); // Close the dialog
-  } else {
-    // Handle scenario where selected routine is not found (optional)
-    print('Error: Selected routine "$selectedRoutineName" not found.');
+  if (widget.onRoutineSelected != null) {
+    widget.onRoutineSelected!(selectedRoutineName);
   }
+
+  Navigator.pop(context);
 }
+
   Future<void> loadSavedRoutines() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String> savedRoutineKeys = prefs.getKeys().toList();
@@ -189,6 +183,12 @@ void _handleRoutineSelection(String selectedRoutineName) {
                     shape: const Border(
                         bottom: BorderSide(color: Colors.grey, width: 0.5)),
                     onTap: () async {
+                    if (widget.isDialog == true) {
+                      // Si se está utilizando en un diálogo, maneja la selección aquí
+                      _handleRoutineSelection(routineName);
+                      print(routine.name);
+                    } else {
+                      // Si no se está utilizando en un diálogo, abre StartRoutineScreen
                       final parsedExercises =
                           exercises.whereType<Exercise>().toList();
 
@@ -201,7 +201,8 @@ void _handleRoutineSelection(String selectedRoutineName) {
                           ),
                         ),
                       );
-                    },
+                    }
+                  },
                   ),
                 );
               },

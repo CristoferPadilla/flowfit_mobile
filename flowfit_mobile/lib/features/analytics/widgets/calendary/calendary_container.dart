@@ -2,14 +2,14 @@ import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 class CalendaryContainer extends StatelessWidget {
   final String day;
-  final String date;
-  const CalendaryContainer({super.key, required this.day, required this.date, MaterialColor? color});
+  final String assignedRoutine;
+  const CalendaryContainer({super.key, required this.day, required this.assignedRoutine, MaterialColor? color});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(10),
-      width: 50,
+      width: 100,
       height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -19,7 +19,7 @@ class CalendaryContainer extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 1), 
           ),
         ],
       ),
@@ -35,7 +35,7 @@ class CalendaryContainer extends StatelessWidget {
             ),
           ),
           Text(
-            date,
+            assignedRoutine,
             style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
