@@ -9,9 +9,11 @@ class ConfigAccountScreen extends StatefulWidget {
 
   @override
   State<ConfigAccountScreen> createState() => _ConfigAccountScreenState();
+  
 }
 
 class _ConfigAccountScreenState extends State<ConfigAccountScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,7 @@ class WeekDays extends StatefulWidget {
 
 class _WeekDaysState extends State<WeekDays> {
   DateTime? _endDate;
+  List<DateTime> gymDays = [];
   bool _isLoading = true;
 
   Future<void> _fetchData() async {
@@ -55,27 +57,33 @@ class _WeekDaysState extends State<WeekDays> {
 
   @override
   Widget build(BuildContext context) {
-    return _endDate != null ? CalendarDays(endDate: _endDate!) : CircularProgressIndicator(); // Mostrar un indicador de carga si _endDate es nulo
+    return _endDate != null
+        ? CalendarDays(endDate: _endDate!, gymDays: gymDays.map((day) => DateTime(day.year, day.month, day.day)).toList())
+        : CircularProgressIndicator(); 
   }
 }
 
 class CalendarDays extends StatelessWidget {
   final DateTime endDate;
+  final List<DateTime> gymDays;
   final int daysInMonth = DateTime.daysPerWeek * 5;
 
-  CalendarDays({required this.endDate, Key? key}) : super(key: key);
+  CalendarDays({required this.endDate, required this.gymDays, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final currentDate = DateTime.now();
     final daysUntilEndOfMonth = endDate.day - currentDate.day;
-    final daysToShow = daysUntilEndOfMonth > daysInMonth ? daysInMonth : daysUntilEndOfMonth +1;
+    final daysToShow = daysUntilEndOfMonth > daysInMonth ? daysInMonth : daysUntilEndOfMonth + 1;
 
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('Mes: ${getMonthName(endDate.month)}',style: FontStyle.titleTextStyle.copyWith(color: Colors.grey,fontSize: 17),),
+          child: Text(
+            'Mes: ${getMonthName(endDate.month)}',
+            style: FontStyle.titleTextStyle.copyWith(color: Colors.grey, fontSize: 17),
+          ),
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -90,12 +98,13 @@ class CalendarDays extends StatelessWidget {
                   final formattedDate = day.day.toString().padLeft(2, '0');
 
                   final isEndDate = day.day == endDate.day;
+                  final isGymDay = gymDays.any((gymDay) => gymDay.year == day.year && gymDay.month == day.month && gymDay.day == day.day+1);
 
                   return Container(
                     width: 40,
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isEndDate ? Colors.red : null,
+                      color: isEndDate ? Colors.red : (isGymDay ? PrimaryTheme.secundaryColor : Colors.white),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Column(
@@ -105,14 +114,14 @@ class CalendarDays extends StatelessWidget {
                           _getDayOfWeek(day),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: isEndDate ? Colors.white : Colors.black,
+                            color: (isEndDate || isGymDay) ? Colors.white : Colors.black,
                           ),
                         ),
                         Text(
                           formattedDate,
                           style: TextStyle(
                             fontSize: 18,
-                            color: isEndDate ? Colors.white : Colors.black,
+                            color: (isEndDate || isGymDay) ? Colors.white : Colors.black,
                           ),
                         ),
                       ],
@@ -126,6 +135,7 @@ class CalendarDays extends StatelessWidget {
       ],
     );
   }
+
 
   String _getDayOfWeek(DateTime date) {
     switch (date.weekday) {

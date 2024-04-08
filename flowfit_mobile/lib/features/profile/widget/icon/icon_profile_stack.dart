@@ -9,37 +9,29 @@ import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 
 class IconProfileStack extends StatefulWidget {
   final bool isEdit;
+  final String? profile_picture;
+
   final Function(String?)? onImageSelected;
 
   const IconProfileStack({
     Key? key,
     required this.isEdit,
-    this.onImageSelected,
+    this.onImageSelected, this.profile_picture,
   }) : super(key: key);
+  
 
   @override
   State<IconProfileStack> createState() => _IconProfileStackState();
 }
 
 class _IconProfileStackState extends State<IconProfileStack> {
-  String? _imageUrl;
-
+ late String? _imageUrl;
   @override
   void initState() {
     super.initState();
-    loadUserData();
+    _imageUrl = widget.profile_picture; // Inicializa _imageUrl con la URL proporcionada
   }
-
-  Future<void> loadUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final imageUrl = prefs.getString('profile_picture'); // Utiliza la misma clave utilizada en _getUserData()
-    if (imageUrl != null && imageUrl.isNotEmpty) {
-      setState(() {
-        _imageUrl = imageUrl;
-      });
-    }
-  }
-
+  
   Future<void> _pickImage() async {
     try {
       final XFile? pickedFile = await ImagePicker().pickImage(
@@ -47,10 +39,9 @@ class _IconProfileStackState extends State<IconProfileStack> {
       );
 
       if (pickedFile != null) {
-        final String imageUrl = pickedFile.path;
-        setState(() {
-          _imageUrl = imageUrl;
-        });
+   setState(() {
+  _imageUrl = pickedFile.path;
+});
         // No es necesario guardar la imagen local en SharedPreferences aquí
         // ya que solo la usamos para mostrarla temporalmente.
         // Guardar la imagen en el servidor se manejará en EditUserInfoScreen.
@@ -83,12 +74,12 @@ class _IconProfileStackState extends State<IconProfileStack> {
               ),
               child: ClipOval(
                 child: _imageUrl != null
-                    ? Image.file(
-                        File(_imageUrl!), // Carga la imagen local desde la ruta
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 150,
-                      )
+                    ? Image.network(
+  _imageUrl!,
+  fit: BoxFit.cover,
+  width: 150,
+  height: 150,
+)
                     : Container(
                         color: Colors.red,
                       ),

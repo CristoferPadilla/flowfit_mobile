@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flowfit_mobile/features/login/screen/login_screen.dart';
@@ -8,6 +10,7 @@ import 'package:flowfit_mobile/features/scanner/screen/scanner_screen.dart';
 import 'package:flowfit_mobile/resources/themes/font_styles.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -17,23 +20,62 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late String username;
-  bool isLoading = true;
+  late String _username;
+  late String _imageUrl;
+  late bool _isLoading;
 
   @override
   void initState() {
     super.initState();
-    loadUserData();
+    _isLoading = true;
+    _getUserData();
   }
 
-  Future<void> loadUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final loadedUsername = prefs.getString('username') ?? '';
-    setState(() {
-      username = loadedUsername;
-      isLoading = false;
-    });
+  Future<void> _getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String? id = prefs.getString('id');
+    String url = 'https://api-zydf.onrender.com/members'; 
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final dynamic responseData = json.decode(response.body);
+        if (responseData != null && responseData is List<dynamic>) {
+          for (var userData in responseData) {
+            if (userData['id'].toString() == id) {
+              if (mounted) { // Verifica si el widget está montado antes de llamar a setState()
+                setState(() {
+                  _username = userData['username'];
+                  _imageUrl = userData['profile_picture'];
+                  _isLoading = false;
+                });
+              }
+              return; 
+            }
+          }
+          print('No se encontró ningún usuario con el ID proporcionado');
+        } else {
+          print('La respuesta del servidor no contiene datos válidos');
+        }
+      } else {
+        print('Error al obtener los datos del usuario: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error de conexión: $e');
+      if (mounted) { // Verifica si el widget está montado antes de llamar a setState()
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
+
 
   void _logout() async {
     final prefs = await SharedPreferences.getInstance();
@@ -76,20 +118,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-        body: isLoading
+        body: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const IconProfileStack(isEdit: false),
+                   IconProfileStack(isEdit: false, profile_picture: _imageUrl,),
                   Center(
                     child: Text(
-                      username.isNotEmpty ? username : 'Loading...',
-                      style: FontStyle.titleTextStyle,
-                    ),
+    _username.isNotEmpty ? _username : 'Loading...',
+    style: FontStyle.titleTextStyle,
+  ),
                   ),
                   const SizedBox(height: 20),
-                  if (username.isNotEmpty)
+                  if (_username.isNotEmpty)
                     CustomFieldData(
                       title: 'Configuración de la cuenta ',
                       icon: Icons.navigate_next_outlined,

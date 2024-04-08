@@ -21,13 +21,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   late DateTime _endDate;
   bool _isLoading = true;
   int _consecutiveDays = 0;
+  List<DateTime> gymDays = [];
 
   @override
   void initState() {
     super.initState();
     _fetchData();
-        _fetchMemberEntries();
-
+    _fetchMemberEntries();
   }
 
   Future<void> _fetchMemberEntries() async {
@@ -43,10 +43,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
       if (response.statusCode == 200) {
         final List<dynamic> responseData = jsonDecode(response.body);
-        List<DateTime> gymDays = [];
+        gymDays.clear(); // Limpiar la lista antes de actualizarla
         for (var entry in responseData) {
           final entryDate = DateTime.parse(entry['entry_time']);
           gymDays.add(entryDate);
+          print(gymDays.toList());
         }
         int consecutiveDays = _calculateConsecutiveDays(gymDays);
         setState(() {
@@ -59,6 +60,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       print('Error de conexión: $e');
     }
   }
+
   Future<void> _fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
@@ -83,7 +85,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 _endDate = DateTime.parse(userData['end_date'].toString());
                 _isLoading = false;
               });
-              break; 
+              break;
             }
           }
         }
@@ -95,7 +97,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     }
   }
 
-   int _calculateConsecutiveDays(List<DateTime> gymDays) {
+  int _calculateConsecutiveDays(List<DateTime> gymDays) {
     if (gymDays.isEmpty) {
       return 0;
     }
@@ -138,43 +140,43 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           ),
                         ),
                       ),
-                      const CustomContainerCard(
-                        height: 0.18,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ColumnData(
-                              title: 'Ejercicios',
-                              icon: Icons.fitness_center_rounded,
-                              number: '4',
-                            ),
-                            ColumnData(
-                              title: 'Kcal',
-                              icon: Icons.local_fire_department_rounded,
-                              number: '11',
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Historial',
-                          style: FontStyle.titleTextStyle.copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                      // const CustomContainerCard(
+                      //   height: 0.18,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       ColumnData(
+                      //         title: 'Ejercicios',
+                      //         icon: Icons.fitness_center_rounded,
+                      //         number: '4',
+                      //       ),
+                      //       ColumnData(
+                      //         title: 'Kcal',
+                      //         icon: Icons.local_fire_department_rounded,
+                      //         number: '11',
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Text(
+                      //     'Historial',
+                      //     style: FontStyle.titleTextStyle.copyWith(
+                      //       fontSize: 20,
+                      //       fontWeight: FontWeight.bold,
+                      //       color: Colors.black,
+                      //     ),
+                      //   ),
+                      // ),
                       CustomContainerCard(
                         height: 0.18,
                         child: Column(
                           children: [
                             Expanded(
-                              child: CalendarDays(endDate: _endDate),
+                              child: CalendarDays(endDate: _endDate, gymDays: gymDays),
                             ),
-                            Divider(
+                            const Divider(
                               color: Colors.grey,
                               thickness: 0.1,
                             ),
@@ -183,11 +185,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                               children: [
                                 Text(
                                   '$_consecutiveDays ',
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
-                                Text(
+                                const Text(
                                   'Día(s) en racha',
-                                  style: TextStyle(fontSize: 15),
+                                  style: const TextStyle(fontSize: 18),
                                 ),
                               ],
                             )
