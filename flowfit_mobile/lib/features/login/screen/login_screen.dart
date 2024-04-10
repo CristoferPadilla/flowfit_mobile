@@ -97,9 +97,11 @@ class _LoginScreenState extends State<LoginScreen> {
           final picture_profile = prefs.getString('picture_profile') ?? '';
           print('AccessToken: $accessToken');
           final id = prefs.getString('id') ?? '';
+          final assigned_membership = prefs.getString('assigned_membership') ?? '';
           print('Id member: $id');
           print('Usuario es: $username');
           print('La foto  es: $picture_profile');
+          print('MEMBRESIA  es: $assigned_membership');
 
           // Verificar si es la primera vez que el usuario inicia sesión
           final bool isFirstLogin = prefs.getBool('isFirstLogin') ?? true;

@@ -16,7 +16,6 @@ class _WeekDaysState extends State<WeekDays> {
   DateTime? _endDate;
   DateTime? _startDate;
   List<DateTime> gymDays = [];
-  bool _isLoading = true;
 
   Future<void> _fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,7 +43,6 @@ class _WeekDaysState extends State<WeekDays> {
         setState(() {
           _startDate = startDate;
           _endDate = endDate;
-          _isLoading = false;
         });
       } else {
         print('Error: ${response.reasonPhrase}');

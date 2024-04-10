@@ -8,6 +8,7 @@ import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 extension CastExtension on Map<dynamic, dynamic> {
   Map<String, String> castToStringMap() {
     return Map<String, String>.from(this).map((key, value) => MapEntry(key as String, value as String));
@@ -31,16 +32,18 @@ class _ListCalendaryState extends State<ListCalendary> {
     _loadAssignedRoutines();
   }
 
-Future<void> _loadAssignedRoutines() async {
-  final prefs = await SharedPreferences.getInstance();
-  final loadedData = prefs.get('assignedRoutines');
+  Future<void> _loadAssignedRoutines() async {
+    final prefs = await SharedPreferences.getInstance();
+    final loadedData = prefs.get('assignedRoutines');
 
-  if (loadedData != null && loadedData is Map<dynamic, dynamic>) {
-    assignedRoutines.addAll(loadedData.castToStringMap());
-  } else {
-    print('No assigned routines found in SharedPreferences.');
+    if (loadedData != null && loadedData is Map<dynamic, dynamic>) {
+      setState(() {
+        assignedRoutines.addAll(loadedData.castToStringMap());
+      });
+    } else {
+      print('No assigned routines found in SharedPreferences.');
+    }
   }
-}
 
   Future<void> _saveAssignedRoutines() async {
     final prefs = await SharedPreferences.getInstance();
@@ -67,18 +70,18 @@ Future<void> _loadAssignedRoutines() async {
           final isToday = _isToday(dayOfWeek);
 
           return GestureDetector(
-  onTap: () => _showDialog(context, day, (selectedRoutineName) {
-    updateSelectedRoutine(selectedRoutineName);
-  }),
-  child: Transform.scale(
-    scale: isToday ? 1.2 : 1.0,
-    child: CalendaryContainer(
-      day: day,
-      assignedRoutine: assignedRoutines[day] ?? '', // Aquí obtienes la rutina asignada para el día correspondiente
-      color: isToday ? Colors.red : null,
-    ),
-  ),
-);
+            onTap: () => _showDialog(context, day, (selectedRoutineName) {
+              updateSelectedRoutine(selectedRoutineName);
+            }),
+            child: Transform.scale(
+              scale: isToday ? 1.2 : 1.0,
+              child: CalendaryContainer(
+                day: day,
+                assignedRoutine: assignedRoutines[day] ?? '',
+                color: isToday ? Colors.red : null, // Cambia el color a rojo si es hoy
+              ),
+            ),
+          );
         },
       ),
     );
@@ -112,50 +115,50 @@ Future<void> _loadAssignedRoutines() async {
   }
 
   void _showDialog(BuildContext context, String day, Function(String) onRoutineSelected) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      final height = MediaQuery.of(context).size.height;
-      final assignedRoutineName = assignedRoutines[day] ?? 'No hay rutina asignada para este día'; 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final height = MediaQuery.of(context).size.height;
+        final assignedRoutineName = assignedRoutines[day] ?? 'No hay rutina asignada para este día';
 
-      return Dialog(
-        child: Container(
-          height: height * 0.35,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Text(day, style: FontStyle.titleTextStyle),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Rutina asignada: $assignedRoutineName',style: FontStyle.descriptionTextStyle.copyWith(color: Colors.black)),
-                ),
-                const CustomeButton(titleButton: 'Crear rutina', screen: CreateRoutineScreen()),
-                CustomeButton(
-                  titleButton: 'Establecer rutina',
-                  screen: SavedRoutinesScreen(
-                    onRoutineSelected: (selectedRoutineName) {
-                      assignedRoutines[day] = selectedRoutineName;
-                      // Guarda assignedRoutines
-                      _saveAssignedRoutines();
-                      onRoutineSelected(selectedRoutineName);
-                    },
-                    isDialog: true,
+        return Dialog(
+          child: Container(
+            height: height * 0.35,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Text(day, style: FontStyle.titleTextStyle),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Rutina asignada: $assignedRoutineName',
+                        style: FontStyle.descriptionTextStyle.copyWith(color: Colors.black)),
                   ),
-                ),
-              ],
+                  const CustomeButton(titleButton: 'Crear rutina', screen: CreateRoutineScreen()),
+                  CustomeButton(
+                    titleButton: 'Establecer rutina',
+                    screen: SavedRoutinesScreen(
+                      onRoutineSelected: (selectedRoutineName) {
+                        assignedRoutines[day] = selectedRoutineName;
+                        _saveAssignedRoutines();
+                        onRoutineSelected(selectedRoutineName);
+                      },
+                      isDialog: true,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 }
 
 class CustomeButton extends StatelessWidget {

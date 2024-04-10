@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reinscripción</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>Reinscripción</h1>
+  <form id="reinscripcionForm">
+    <label for="memberId">ID del miembro:</label><br>
+    <input type="text" id="memberId" name="memberId"><br>
+    <label for="membershipId">ID de la membresía:</label><br>
+    <input type="text" id="membershipId" name="membershipId"><br>
+    <div id="card-element">
+      <!-- Elements will create input elements here -->
+    </div>
+    <input type="submit" value="Enviar">
+  </form>
+
+  <script>
+    var stripe = Stripe('pk_test_51OounUGf0J9y3KivIqzJpSV92NDZilojutUMqd6rARztgpcAjrNxpSmvZksj8uaaUj0XCTDY7eaWvh3MS4CX9I3300fnLmtcoI');
+    var elements = stripe.elements();
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    $(document).ready(function() {
+      $('#reinscripcionForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var memberId = $('#memberId').val();
+        var membershipId = $('#membershipId').val();
+
+        stripe.createToken(card).then(function(result) {
+          if (result.error) {
+            // Inform the user if there was an error
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+          } else {
+            // Send the token to your server
+            var stripeToken = result.token.id;
+
+            $.ajax({
+              url: 'http://localhost:3000/members/renew/' + memberId,
+              type: 'PUT',
+              data: JSON.stringify({
+                membershipId: membershipId,
+                stripeToken: stripeToken
+              }),
+              contentType: 'application/json',
+              headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6Im1lbWJlciIsImlhdCI6MTcxMjYyOTExNSwiZXhwIjoxNzEyNjMyNzE1fQ.gFQ392ugflwm165kt5QwwtKtT72Nhr-PQGzUa5gEyaw'
+              },
+              success: function(response) {
+                alert('Reinscripción exitosa');
+              },
+              error: function(error) {
+                alert('Error en la reinscripción');
+              }
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

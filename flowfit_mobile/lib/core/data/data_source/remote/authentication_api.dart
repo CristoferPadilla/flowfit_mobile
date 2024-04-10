@@ -22,6 +22,7 @@ Future<LoginResponse> login(String username, String password) async {
     if (result.statusCode == 200) {
       final accessToken = result.data['accessToken'];
       final id = result.data['member']['id'];
+      final assigned_membership = result.data['member']['assigned_membership'];
       final profilePicture = result.data['member']['profile_picture'];
 
       final prefs = await SharedPreferences.getInstance();
@@ -29,6 +30,7 @@ Future<LoginResponse> login(String username, String password) async {
       await prefs.setString('accessToken', accessToken);
       await prefs.setString('id', id.toString());
       await prefs.setString('picture_profile', profilePicture);
+      await prefs.setString('assigned_membership', assigned_membership.toString());
 
       print('AccessToken: $accessToken');
       print('ID del usuario: $id');

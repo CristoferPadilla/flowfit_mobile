@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
-import 'package:flowfit_mobile/core/data/data_source/exercise/exercise.dart';
 
 class ContainerExercice extends StatelessWidget {
   final String name;
