@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:flowfit_mobile/features/analytics/widgets/list/list_calendary.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flowfit_mobile/features/home/widget/card/membership_card.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,11 @@ class _MembershipScreenState extends State<MembershipScreen> {
   Future<void> makePayment() async { 
     try { 
       // Create payment intent data 
-      paymentIntent = await createPaymentIntent('1000','INR');
+
+      //todo este es el default
+      // paymentIntent = await createPaymentIntent('1000','MXN');
+      //todo este es para la api
+      paymentIntent = await  createPaymentAPI();
       // initialise the payment sheet setup 
       await Stripe.instance.initPaymentSheet( 
         paymentSheetParameters: SetupPaymentSheetParameters( 
@@ -73,8 +78,8 @@ class _MembershipScreenState extends State<MembershipScreen> {
           googlePay: const PaymentSheetGooglePay( 
               // Currency and country code is accourding to India 
               testEnv: true, 
-              currencyCode: "INR", 
-              merchantCountryCode: "IN"), 
+              currencyCode: "MXN", 
+              merchantCountryCode: "MX"), 
           // Merchant Name 
           merchantDisplayName: 'Flutterwings', 
           // return URl if you want to add 
@@ -118,41 +123,42 @@ class _MembershipScreenState extends State<MembershipScreen> {
     } 
   } 
 
-  // Future createPayment() async {
-  //   try {
-  //     final prefs = await SharedPreferences.getInstance();
-  //     final memberId = prefs.getString('id') ?? '';
-  //     final assignedMembership = prefs.getString('assigned_membership') ?? '';
-  //     final isStripe = true; 
-  //     final Map<String, String> env = dotenv.env;
-  //     final stripeToken = env['STRIPE_PUBLISH'];
-  //     final accessToken = prefs.getString('accessToken') ?? '';
+  Future createPaymentAPI() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final memberId = prefs.getString('id') ?? '';
+      final assignedMembership = prefs.getString('assigned_membership') ?? '';
+      final isStripe = true; 
+      final Map<String, String> env = dotenv.env;
+      final stripeToken = env['STRIPE_PUBLISH'];
+      final accessToken = prefs.getString('accessToken') ?? '';
 
-  //     final response = await http.put(
-  //       Uri.parse('https://api-zydf.onrender.com/members/renew/$memberId'),
-  //       headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: jsonEncode({
-  //         "membershipId": assignedMembership,
-  //           "isStripe": isStripe,
-  //         'stripeToken': stripeToken,
+      final response = await http.put(
+        Uri.parse('https://api-zydf.onrender.com/members/renew/$memberId'),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "membershipId": assignedMembership,
+            // "isStripe": isStripe,
+          'stripeToken': stripeToken,
           
-  //       }),
-  //     );
+        }),
+      );
 
-  //     if (response.statusCode == 200) {
-  //       final result = jsonDecode(response.body);
-  //       print('Resultado de renovación: $result');
-  //     } else {
-  //       print('Error al renovar la membresía: ${response.statusCode}');
-  //       print('Error al renovar la membresía: ${response.body}');
-  //     }
-  //   } catch (err) {
-  //     print('Error al renovar la membresía: $err'); 
-  //   }
-  // }
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        print('Resultado de renovación: $result');
+      } else {
+        print('Error al renovar la membresía: ${response.statusCode}');
+        print('Error al renovar la membresía: ${response.body}');
+      }
+    } catch (err) {
+      print('Error al renovar la membresía: $err'); 
+    }
+  }
+
   createPaymentIntent(String amount, String currency) async { 
     try { 
       Map<String, dynamic> body = { 

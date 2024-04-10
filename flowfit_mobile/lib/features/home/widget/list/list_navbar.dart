@@ -11,11 +11,11 @@ import 'package:showcaseview/showcaseview.dart';
   int selectedindex = 0;
 
 final List<Widget> navScreens = <Widget>[
-  ShowCaseWidget(
-      autoPlay: true,
-      autoPlayDelay: const Duration(milliseconds: 5000),
-      scrollDuration: const Duration(seconds: 3),
-      builder: Builder(builder: ((context) => const HomeScreen()))),
+  // ShowCaseWidget(
+  //     autoPlay: true,
+  //     autoPlayDelay: const Duration(milliseconds: 5000),
+  //     scrollDuration: const Duration(seconds: 3),
+  //     builder: Builder(builder: ((context) => const HomeScreen()))),
   ShowCaseWidget(
       autoPlay: true,
       autoPlayDelay: const Duration(milliseconds: 5000),

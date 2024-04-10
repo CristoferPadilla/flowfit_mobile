@@ -1,3 +1,4 @@
+import 'package:flowfit_mobile/features/analytics/widgets/list/list_calendary.dart';
 import 'package:flowfit_mobile/features/exercises/screens/create_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/screens/save_routine_screen.dart';
 import 'package:flowfit_mobile/features/exercises/widgets/containers/routine_option_container.dart';
@@ -22,6 +23,30 @@ class ExercisesScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+                                          Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Mi semana',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+               Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Asigna días a tus rutinas a cada día de la semana una rutina',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+                                                    ListCalendary(),
+
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -36,7 +61,7 @@ class ExercisesScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  'Has que tu entrenador elija tus ejercicios y crea tu propia rutina',
+                  'Has que tu entrenador elija los mejores ejercicios y crea tu propia rutina',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 12,
@@ -81,7 +106,7 @@ class ExercisesScreen extends StatelessWidget {
                           Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  'Prueba tu rutina aquí',
+                  'Mira tus ruinas guardadas',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -92,7 +117,7 @@ class ExercisesScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  'Lleva un registro del tiempo de tus ejercicios',
+                  'Lleva un registro de las rutinas que te serán útiles en el futuro',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 12,
@@ -101,8 +126,8 @@ class ExercisesScreen extends StatelessWidget {
                 ),
               ),
               RoutineOptionContainer(
-                icon: Icons.play_circle_outline,
-                title: 'Empezar rutina',
+                icon: Icons.save,
+                title: 'Ver rutinas',
                 description: '',
                 screen: SavedRoutinesScreen(),
               ),

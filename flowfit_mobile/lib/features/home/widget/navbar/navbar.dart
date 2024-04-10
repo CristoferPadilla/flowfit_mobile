@@ -32,10 +32,10 @@ class NavBarState extends State<NavBar> {
             tabBorderRadius: 50,
             tabBackgroundColor: PrimaryTheme.secundaryColor,
             tabs: const [
-              GButton(
-                icon: Icons.home,
-                text: 'Menú',
-              ),
+              // GButton(
+              //   icon: Icons.home,
+              //   text: 'Menú',
+              // ),
               GButton(
                 icon: Icons.fitness_center,
                 text: 'Entrenamiento',
