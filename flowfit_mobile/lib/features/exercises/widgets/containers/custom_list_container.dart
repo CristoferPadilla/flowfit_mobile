@@ -8,8 +8,10 @@ class CustomListContainer extends StatelessWidget {
   final String instruction;
   final String bodyPart;
   final String name;
+  
   const CustomListContainer({
     super.key, required this.gifUrl, required this.name, required this.instruction, required this.bodyPart,
+    
   });
 
   @override
@@ -47,7 +49,7 @@ class CustomListContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(name,style: FontStyle.titleTextStyle.copyWith(fontSize: 15),),
-                      Text('12x5',style: FontStyle.descriptionTextStyle.copyWith(fontSize: 15)),
+                      Text('12x4',style: FontStyle.descriptionTextStyle.copyWith(fontSize: 15)),
                     ],
                   ),
                 ),

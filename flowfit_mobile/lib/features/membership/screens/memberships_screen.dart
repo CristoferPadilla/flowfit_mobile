@@ -1,10 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:math';
 import 'package:flowfit_mobile/features/analytics/widgets/list/list_calendary.dart';
 import 'package:flowfit_mobile/features/home/widget/appbar/custome_appbar.dart';
 import 'package:flowfit_mobile/features/home/widget/card/membership_card.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -19,10 +23,25 @@ class MembershipScreen extends StatefulWidget {
 }
 
 class _MembershipScreenState extends State<MembershipScreen> {
+    final controller = CardFormEditController();
+  @override
+  void initState() {
+    controller.addListener(update);
+    super.initState();
+  }
+
+  void update() => setState(() {});
+  @override
+  void dispose() {
+    controller.removeListener(update);
+    controller.dispose();
+    super.dispose();
+}
   Map<String, dynamic>? paymentIntent; 
   
   @override
   Widget build(BuildContext context) {
+    
     return SafeArea(
       child: Scaffold(
         appBar: const PreferredSize(
@@ -53,6 +72,29 @@ class _MembershipScreenState extends State<MembershipScreen> {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
+                // Container(
+                //   width: 300,
+                //   height: 700,
+                //   child: CardFormField(
+                //     style: CardFormStyle(
+                //       backgroundColor: Colors.white,
+                //       textColor: Colors.black,
+                //       cursorColor:Colors.black,
+                //       placeholderColor: PrimaryTheme.secundaryColor,
+                //       borderColor: PrimaryTheme.secundaryColor,
+                //     ),
+                    
+                //       onCardChanged: (card) {
+                //      controller: controller;
+                //   if(controller.details.complete == true)
+                //     ElevatedButton(
+                //       onPressed: _handlePayPress,
+                //       child: Text('Pay'),
+                //     );
+                //       },
+                          
+                //   ),
+                // )
               ],
             ),
             
@@ -62,32 +104,58 @@ class _MembershipScreenState extends State<MembershipScreen> {
     );
   }
   
+// Future<void> _handlePayPress() async{
+//   await Stripe.instance.confirmPayment(
+//     data: 
+//       PaymentMethodParams.card(
+//         paymentMethodData: PaymentMethodData(
+
+//           billingDetails: BillingDetails(
+
+//           ),
+//         ),
+      
+//     ),
+//      paymentIntentClientSecret: 'clientSecret',
+// );
+// }
   Future<void> makePayment() async { 
     try { 
       // Create payment intent data 
 
       //todo este es el default
-      // paymentIntent = await createPaymentIntent('1000','MXN');
+      paymentIntent = await createPaymentIntent('250','MXN');
       //todo este es para la api
-      paymentIntent = await  createPaymentAPI();
-      // initialise the payment sheet setup 
+      // paymentIntent = await  createPaymentAPI();
+
       await Stripe.instance.initPaymentSheet( 
         paymentSheetParameters: SetupPaymentSheetParameters( 
           // Client secret key from payment data 
           paymentIntentClientSecret: paymentIntent!['client_secret'], 
+          allowsDelayedPaymentMethods: true,
           googlePay: const PaymentSheetGooglePay( 
               // Currency and country code is accourding to India 
               testEnv: true, 
               currencyCode: "MXN", 
-              merchantCountryCode: "MX"), 
+              merchantCountryCode: "MX",
+
+
+              ), 
           // Merchant Name 
+          customerId: Stripe.stripeAccountId,
           merchantDisplayName: 'Flutterwings', 
+          // intentConfiguration: IntentConfiguration(
+          //   mode: IntentMode(currencyCode: currencyCode, amount: amount)
+          // )
           // return URl if you want to add 
           // returnURL: 'flutterstripe://redirect', 
         ), 
+        
       ); 
       // Display payment sheet 
-      displayPaymentSheet(); 
+      displayPaymentSheet(
+
+      ); 
     } catch (e) { 
       print("exception $e"); 
   
@@ -103,11 +171,14 @@ class _MembershipScreenState extends State<MembershipScreen> {
     try { 
       // "Display payment sheet"; 
       await Stripe.instance.presentPaymentSheet(); 
+      
       // Show when payment is done 
       // Displaying snackbar for it 
       ScaffoldMessenger.of(context).showSnackBar( 
         const SnackBar(content: Text("Paid successfully")), 
       ); 
+              print('paymentResult');
+
       paymentIntent = null; 
     } on StripeException catch (e) { 
       // If any error comes during payment  
@@ -123,7 +194,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
     } 
   } 
 
-  Future createPaymentAPI() async {
+   createPaymentAPI() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final memberId = prefs.getString('id') ?? '';
@@ -140,9 +211,10 @@ class _MembershipScreenState extends State<MembershipScreen> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
+          'memberId':memberId,
           "membershipId": assignedMembership,
             // "isStripe": isStripe,
-          'stripeToken': stripeToken,
+          'stripeToken':stripeToken ,
           
         }),
       );
@@ -153,6 +225,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
       } else {
         print('Error al renovar la membresía: ${response.statusCode}');
         print('Error al renovar la membresía: ${response.body}');
+        print('Error al renovar la membresía: ${response.reasonPhrase}');
       }
     } catch (err) {
       print('Error al renovar la membresía: $err'); 
@@ -182,6 +255,9 @@ class _MembershipScreenState extends State<MembershipScreen> {
     } catch (err) { 
       print('Error charging user: ${err.toString()}'); 
     } 
-  } 
+  }
+
+
+
 }
 

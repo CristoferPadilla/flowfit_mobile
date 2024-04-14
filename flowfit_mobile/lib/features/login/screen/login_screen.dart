@@ -2,8 +2,11 @@
 
 import 'dart:async';
 
+import 'package:flowfit_mobile/features/home/widget/list/list_option.dart';
+import 'package:flowfit_mobile/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flowfit_mobile/features/first-steps/screens/first_steps.dart';
 import 'package:page_transition/page_transition.dart';
@@ -190,17 +193,19 @@ void _login() async {
             Positioned(
               top: height * 0.1,
               child: Container(
-                width: 120,
+                width: 220,
                 height: 120,
-                decoration: const BoxDecoration(
+                decoration:  BoxDecoration(
                   color: PrimaryTheme.backgroundColor,
-                  shape: BoxShape.circle,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadiusDirectional.circular(20)
                 ),
-                child: const Icon(
-                  Icons.fitness_center,
-                  color: Colors.white,
-                  size: 80,
-                ),
+              
+                child: Image.asset(
+            AppResource.logopng, // Utiliza la ruta definida en AppResource
+            width: 200,
+            height: 200,
+          ),
               ),
             ),
             Container(

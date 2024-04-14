@@ -6,6 +6,8 @@ class AppResource{
   final String ejercicio3 = 'assets/jpeg/Ejercicio3.jpeg';
   final String shopImage = 'assets/jpge/protein.jpeg';
 
+ static  final String logopng = 'assets/png/LogoApp2.png';
+
   //svg
   final String logoSvg = 'assets/svg/logo.svg';
 

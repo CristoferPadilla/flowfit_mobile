@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flowfit_mobile/features/analytics/widgets/column/custome_column.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -141,24 +142,29 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           ),
                         ),
                       ),
-                      // const CustomContainerCard(
-                      //   height: 0.18,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //     children: [
-                      //       ColumnData(
-                      //         title: 'Ejercicios',
-                      //         icon: Icons.fitness_center_rounded,
-                      //         number: '4',
-                      //       ),
-                      //       ColumnData(
-                      //         title: 'Kcal',
-                      //         icon: Icons.local_fire_department_rounded,
-                      //         number: '11',
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                       CustomContainerCard(
+                        height: 0.18,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                           Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Objetivo:',
+                          style: FontStyle.titleTextStyle.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Text(
+                              'Mejorar mi salud física',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
                       // Padding(
                       //   padding: const EdgeInsets.all(8.0),
                       //   child: Text(

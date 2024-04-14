@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flowfit_mobile/features/first-steps/widget/title/custom_title.dart';
 import 'package:flowfit_mobile/features/home/widget/navbar/navbar.dart';
+import 'package:flowfit_mobile/resources/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
@@ -112,20 +113,30 @@ void _actualizarIMC() {
               _buildTextField(label: 'Estatura en metros', controller: _heightController),
               // _buildIMCTextField(),
               const SizedBox(height: 30,),
-              ElevatedButton(
-                onPressed: () {
-                  enviarDatosAPI();
-                   Navigator.push(
-        context,
-        PageTransition(
-          type: PageTransitionType.fade,
-          child: const NavBar(),
-          inheritTheme: true,
-          ctx: context,
-        ),
-      );
-                },
-                child: const Text('Enviar Datos'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    enviarDatosAPI();
+                     Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: const NavBar(),
+                          inheritTheme: true,
+                          ctx: context,
+                        ),
+                      );
+                  },
+                  child: const Text('Enviar Datos', style: TextStyle(color: Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                                backgroundColor: PrimaryTheme.secundaryColor,
+                                minimumSize: const Size(double.infinity,
+                                    48.0), // Adjust width and height as needed
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
+                              ),
+                ),
               ),
             ],
           ),

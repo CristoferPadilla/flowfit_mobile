@@ -8,7 +8,7 @@ void main() async {
   await dotenv.load(fileName: "assets/.env");
   Stripe.publishableKey=dotenv.env["STRIPE_PUBLISH"]!;
   await Stripe.instance.applySettings();
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -16,7 +16,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),
     );
